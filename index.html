@@ -3,13 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Artificial Neural Networks — Unit I &amp; Unit II Notes</title>
+<title>Soft Computing — ANN, Fuzzy Logic &amp; Genetic Algorithms (Units I–V)</title>
 
 <script>
   window.MathJax = {
     tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']], tags: 'none' },
     chtml: { scale: 1.02 },
-    options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'svg', 'canvas'] }
+    options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'svg', 'canvas'] },
+    startup: {
+      typeset: false,   /* units are typeset on demand when first opened */
+      ready: () => { MathJax.startup.defaultReady(); MathJax.startup.promise.then(() => window.__typesetPending && window.__typesetPending()); }
+    }
   };
 </script>
 <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
@@ -42,6 +46,7 @@
 
   /* ---------- NAVBAR ---------- */
   nav.top {
+    overflow-x: auto; white-space: nowrap;
     position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index: 100;
     background: var(--nav); display: flex; align-items: center; padding: 0 24px; gap: 8px;
     box-shadow: 0 2px 12px rgba(0,0,0,.25);
@@ -157,26 +162,73 @@
     nav.top { padding: 0 10px; } nav.top .brand { font-size: 15px; } nav.top a.navlink { padding: 6px 10px; }
     .steps > li { padding-left: 14px; padding-top: 30px; }
   }
+  [data-unit-block] { display: none; }
+  [data-unit-block].shown { display: block; }
+  .unit-head { margin-top: 0; }
+  mjx-container[display="true"] { overflow-x: auto; overflow-y: hidden; max-width: 100%; }
+  .toc ol { grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); }
+  .grid2 { grid-template-columns: repeat(auto-fit, minmax(min(290px, 100%), 1fr)); }
+  .grid3 { grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr)); }
+
+  /* ---------- Smartwatch (e.g. Samsung Galaxy Watch4, ~360px and below, round screen) ---------- */
+  @media (max-width: 360px) {
+    :root { --nav-h: 40px; }
+    body { font-size: 13px; line-height: 1.55; }
+    nav.top { padding: 0 18%; gap: 2px; justify-content: flex-start; }
+    nav.top .brand { display: none; }
+    nav.top a.navlink { padding: 4px 7px; font-size: 11px; border-radius: 6px; }
+    main { padding: calc(var(--nav-h) + 10px) 10% 40px; }
+    .hero { padding: 14px 12px; border-radius: 12px; text-align: center; }
+    .hero h1 { font-size: 16px; } .hero p { font-size: 12px; }
+    .hero .btns a { display: block; margin: 6px 0; padding: 7px 10px; font-size: 12px; }
+    .unit-head { padding: 12px 12px 10px; border-radius: 12px 12px 0 0; text-align: center; }
+    .unit-head h1 { font-size: 16px; } .unit-head p { font-size: 11px; }
+    .toc { padding: 10px; } .toc a { padding: 7px 8px; font-size: 12px; } .toc a small { font-size: 10.5px; }
+    .toc a::before { min-width: 20px; height: 20px; font-size: 11px; }
+    section.topic { padding: 4px 10px 14px; border-radius: 12px; margin-bottom: 16px; }
+    section.topic > h2 { font-size: 16px; margin: 10px 0 6px; }
+    section.topic > h2 .back { font-size: 10px; padding: 2px 6px; }
+    h3 { font-size: 14.5px; margin: 16px 0 6px; } h4 { font-size: 13.5px; }
+    .formula, .terms, .note, .numerical { padding: 8px 9px; margin: 10px 0; }
+    .numerical > .qt { font-size: 13.5px; }
+    table { display: block; overflow-x: auto; font-size: 11.5px; }
+    th, td { padding: 4px 5px; }
+    pre.algo { font-size: 10.5px; padding: 8px; }
+    code, .mono { font-size: 11px; }
+    .steps > li { padding: 24px 8px 6px; font-size: 12.5px; }
+    .steps > li::before { left: 8px; top: 4px; font-size: 11px; }
+    ul, ol { padding-left: 18px; }
+    mjx-container { font-size: 92% !important; }
+    #toTop { width: 34px; height: 34px; font-size: 16px; right: 50%; transform: translateX(50%); bottom: 8px; }
+    footer { font-size: 11px; padding: 10px 15% 40px; }
+  }
+
   @media print { nav.top, #toTop { display: none; } main { padding-top: 10px; } section.topic { break-inside: auto; } }
 </style>
 </head>
 <body>
 
 <nav class="top">
-  <a class="brand" href="#home">ANN <span>Notes</span></a>
+  <a class="brand" href="#home">Soft Computing <span>Notes</span></a>
   <a class="navlink" href="#unit1" data-unit="unit1">Unit I</a>
   <a class="navlink" href="#unit2" data-unit="unit2">Unit II</a>
+  <a class="navlink" href="#unit3" data-unit="unit3">Unit III</a>
+  <a class="navlink" href="#unit4" data-unit="unit4">Unit IV</a>
+  <a class="navlink" href="#unit5" data-unit="unit5">Unit V</a>
 </nav>
 
 <main>
 
 <div class="hero" id="home">
-  <h1>Artificial Neural Networks</h1>
+  <h1>Soft Computing — ANN, Fuzzy Logic &amp; Genetic Algorithms</h1>
   <p>In-depth notes with derivations, every term explained, and fully worked numericals.
      Use the navigation bar to jump to a unit, then use the topic index at the top of each unit to jump to a topic.</p>
   <div class="btns">
     <a href="#unit1">Unit I — Fundamentals of ANN →</a>
     <a href="#unit2">Unit II — Models of ANN →</a>
+    <a href="#unit3">Unit III — Fuzzy Sets &amp; Relations →</a>
+    <a href="#unit4">Unit IV — Fuzzy Inference Systems →</a>
+    <a href="#unit5">Unit V — Genetic Algorithms →</a>
   </div>
 </div>
 
@@ -1750,10 +1802,1314 @@ We use \(D(j) = \lVert\mathbf{x} - \mathbf{w}_j\rVert^2\) (squared distance give
 </section>
 </div><!-- /unit2 -->
 
+<!-- =====================================================================
+                                UNIT III
+     ===================================================================== -->
+<div id="unit3" data-unit-block="unit3">
+<div class="unit-head" id="unit3-top">
+  <h1>Unit III — Fuzzy Sets &amp; Fuzzy Relations</h1>
+  <p>Crisp vs fuzzy sets → properties and operations → fuzzy relations, cardinality, operations and properties → fuzzy composition</p>
+</div>
+<div class="toc">
+  <h4>Topics in this unit (click to jump)</h4>
+  <ol>
+    <li><a href="#u3-intro">Crisp Sets vs Fuzzy Sets<small>Membership function, notation, examples</small></a></li>
+    <li><a href="#u3-terms">Basic Fuzzy Set Terminology<small>Support, core, height, α-cut, normal, convex, cardinality</small></a></li>
+    <li><a href="#u3-ops">Operations on Fuzzy Sets<small>Union, intersection, complement, algebraic &amp; bounded operations</small></a></li>
+    <li><a href="#u3-props">Properties of Fuzzy Sets<small>Commutativity … De Morgan; excluded middle fails</small></a></li>
+    <li><a href="#u3-rel">Fuzzy Relations<small>Crisp relations, Cartesian product, relation matrix</small></a></li>
+    <li><a href="#u3-card">Cardinality of Fuzzy Relations<small>Crisp vs fuzzy relation cardinality</small></a></li>
+    <li><a href="#u3-relops">Operations on Fuzzy Relations<small>Union, intersection, complement, inverse, projection</small></a></li>
+    <li><a href="#u3-relprops">Properties of Fuzzy Relations<small>Algebraic laws, reflexive, symmetric, transitive, tolerance, equivalence</small></a></li>
+    <li><a href="#u3-comp">Fuzzy Composition<small>Max-min, max-product, set–relation composition</small></a></li>
+    <li><a href="#u3-compare">Quick Revision<small>Formula sheet</small></a></li>
+  </ol>
+</div>
+
+<!-- ============ 1. INTRO ============ -->
+<section class="topic" id="u3-intro">
+<h2>1. Crisp Sets vs Fuzzy Sets <a class="back" href="#unit3-top">↑ Unit III topics</a></h2>
+<p><b>Fuzzy logic</b> was introduced by <b>Lotfi A. Zadeh (1965)</b> to handle concepts that are vague or imprecise — "tall", "hot", "fast", "young". In classical (crisp) logic a statement is either true (1) or false (0). In fuzzy logic, truth is a <b>matter of degree</b> anywhere in \([0, 1]\).</p>
+
+<h3>1.1 Crisp (classical) set</h3>
+<p>Let \(X\) be the <b>universe of discourse</b> (the set of all elements under consideration). A crisp set \(A \subseteq X\) is defined by its <b>characteristic function</b>:</p>
+<div class="formula">\[ \chi_A(x) = \begin{cases} 1, & x \in A \\ 0, & x \notin A \end{cases} \qquad \chi_A : X \to \{0,\,1\} \]</div>
+<p>An element either belongs completely or does not belong at all — there is a sharp boundary.</p>
+
+<h3>1.2 Fuzzy set</h3>
+<p>A fuzzy set \(\tilde{A}\) in \(X\) is a set of ordered pairs</p>
+<div class="formula">\[ \tilde{A} = \bigl\{\,(x,\ \mu_{\tilde A}(x)) \;\big|\; x \in X \,\bigr\}, \qquad \mu_{\tilde A} : X \to [0,\,1] \]</div>
+<div class="terms"><b class="h">Terms</b><ul>
+<li>\(\mu_{\tilde A}(x)\) — <b>membership function (MF)</b>; gives the <b>degree of membership</b> (grade) of \(x\) in \(\tilde{A}\).</li>
+<li>\(\mu = 1\) → full member; \(\mu = 0\) → not a member; \(0 \lt \mu \lt 1\) → partial member.</li>
+<li>The tilde "~" marks a fuzzy set; many books drop it and simply write \(A\).</li>
+</ul></div>
+
+<h3>1.3 Notation (Zadeh's notation)</h3>
+<div class="formula">
+<b>Discrete (finite) universe:</b>
+\[ \tilde{A} = \left\{ \frac{\mu_{\tilde A}(x_1)}{x_1} + \frac{\mu_{\tilde A}(x_2)}{x_2} + \cdots \right\} = \left\{ \sum_{i} \frac{\mu_{\tilde A}(x_i)}{x_i} \right\} \]
+<b>Continuous universe:</b>
+\[ \tilde{A} = \left\{ \int_X \frac{\mu_{\tilde A}(x)}{x} \right\} \]
+</div>
+<div class="note"><b class="h">Important:</b> In this notation the horizontal bar "/" is <b>not division</b> — it means "membership of element". The "+" is <b>not addition</b> — it means "collection / union of elements". The "\(\int\)" is <b>not integration</b> — it means a continuous collection of elements.</div>
+
+<div class="numerical">
+<div class="qt">Example 1.1 — Crisp vs fuzzy "tall"</div>
+<div class="q">Universe: heights (cm) \(X = \{160, 170, 180, 190\}\). Crisp "tall" = height ≥ 180. Fuzzy "tall" assigns grades.</div>
+\[ \text{Crisp: } A = \left\{ \frac{0}{160} + \frac{0}{170} + \frac{1}{180} + \frac{1}{190} \right\} \qquad \text{Fuzzy: } \tilde{A} = \left\{ \frac{0.2}{160} + \frac{0.5}{170} + \frac{0.8}{180} + \frac{1}{190} \right\} \]
+<p>A person of 179 cm is "not tall" in the crisp set (a sudden jump at 180), but is tall to degree ≈ 0.8 in the fuzzy set — much closer to human reasoning.</p>
+<figure><canvas id="fz-tall" width="420" height="220"></canvas><figcaption>Crisp (blue, step) vs fuzzy (red, gradual) membership for "tall"</figcaption></figure>
+</div>
+
+<h3>1.4 Crisp set vs Fuzzy set</h3>
+<table class="left">
+<tr><th>Crisp set</th><th>Fuzzy set</th></tr>
+<tr><td>Membership is 0 or 1</td><td>Membership is any value in [0, 1]</td></tr>
+<tr><td>Sharp boundary</td><td>Gradual (vague) boundary</td></tr>
+<tr><td>Based on bivalent (two-valued) logic</td><td>Based on multi-valued (infinite-valued) logic</td></tr>
+<tr><td>Law of excluded middle holds: \(A \cup \bar A = X\)</td><td>Does not hold: \(\tilde A \cup \bar{\tilde A} \ne X\)</td></tr>
+<tr><td>Law of contradiction holds: \(A \cap \bar A = \varnothing\)</td><td>Does not hold: \(\tilde A \cap \bar{\tilde A} \ne \varnothing\)</td></tr>
+<tr><td>Example: {even numbers}</td><td>Example: {numbers close to 10}</td></tr>
+</table>
+<div class="note"><b class="h">Fuzziness vs probability:</b> Probability describes the <i>likelihood</i> of an uncertain event happening; fuzziness describes the <i>degree</i> to which an event/property is true. "μ(tall) = 0.8" does not mean an 80 % chance of being tall — it means the person <i>is</i> tall to degree 0.8.</div>
+</section>
+
+<!-- ============ 2. TERMS ============ -->
+<section class="topic" id="u3-terms">
+<h2>2. Basic Fuzzy Set Terminology <a class="back" href="#unit3-top">↑ Unit III topics</a></h2>
+<table class="left">
+<tr><th>Term</th><th>Definition</th></tr>
+<tr><td><b>Support</b></td><td>\(\text{supp}(\tilde A) = \{x \in X \mid \mu_{\tilde A}(x) \gt 0\}\) — all elements with non-zero membership.</td></tr>
+<tr><td><b>Core</b></td><td>\(\text{core}(\tilde A) = \{x \in X \mid \mu_{\tilde A}(x) = 1\}\) — elements with full membership.</td></tr>
+<tr><td><b>Boundary</b></td><td>\(\{x \mid 0 \lt \mu_{\tilde A}(x) \lt 1\}\) — elements with partial membership.</td></tr>
+<tr><td><b>Height</b></td><td>\(hgt(\tilde A) = \max_{x} \mu_{\tilde A}(x)\) (supremum).</td></tr>
+<tr><td><b>Normal fuzzy set</b></td><td>Height = 1 (at least one element has membership 1). If height \(\lt 1\): <b>subnormal</b>.</td></tr>
+<tr><td><b>Crossover point</b></td><td>Element where \(\mu_{\tilde A}(x) = 0.5\).</td></tr>
+<tr><td><b>Fuzzy singleton</b></td><td>A fuzzy set whose support is a single point \(x_0\) with \(\mu = 1\) (used in fuzzification).</td></tr>
+<tr><td><b>α-cut (λ-cut)</b></td><td>\(A_\alpha = \{x \mid \mu_{\tilde A}(x) \ge \alpha\}\), \(0 \le \alpha \le 1\) — a <b>crisp</b> set.</td></tr>
+<tr><td><b>Strong α-cut</b></td><td>\(A_{\alpha^+} = \{x \mid \mu_{\tilde A}(x) \gt \alpha\}\).</td></tr>
+<tr><td><b>Convex fuzzy set</b></td><td>\(\mu_{\tilde A}(\lambda x_1 + (1-\lambda)x_2) \ge \min[\mu_{\tilde A}(x_1),\ \mu_{\tilde A}(x_2)]\) for all \(x_1, x_2\), \(\lambda \in [0,1]\) — MF rises then falls (no dips); all α-cuts are intervals.</td></tr>
+<tr><td><b>Scalar cardinality</b></td><td>\(|\tilde A| = \sum_{x \in X} \mu_{\tilde A}(x)\) (for continuous: \(\int_X \mu_{\tilde A}(x)\,dx\)).</td></tr>
+<tr><td><b>Relative cardinality</b></td><td>\(\lVert \tilde A \rVert = \dfrac{|\tilde A|}{|X|}\), where \(|X|\) = number of elements in the universe.</td></tr>
+<tr><td><b>Empty fuzzy set</b></td><td>\(\mu_{\tilde A}(x) = 0\ \forall x\). <b>Universal fuzzy set</b>: \(\mu(x) = 1\ \forall x\).</td></tr>
+</table>
+<p><b>Properties of α-cuts:</b> \((A \cup B)_\alpha = A_\alpha \cup B_\alpha\), \((A \cap B)_\alpha = A_\alpha \cap B_\alpha\), and if \(\alpha \le \beta\) then \(A_\beta \subseteq A_\alpha\). The α-cut at \(\alpha = 0^+\) is the support; at \(\alpha = 1\) it is the core.</p>
+
+<div class="numerical">
+<div class="qt">Numerical 2.1 — Support, core, height, α-cuts, cardinality</div>
+<div class="q">\(X = \{1, 2, 3, 4, 5, 6, 7\}\), \(\tilde A = \left\{ \frac{0}{1} + \frac{0.2}{2} + \frac{0.5}{3} + \frac{0.9}{4} + \frac{1}{5} + \frac{0.7}{6} + \frac{0.3}{7} \right\}\). Find all the terms.</div>
+<ul>
+<li>Support \(= \{2, 3, 4, 5, 6, 7\}\) (all μ &gt; 0)</li>
+<li>Core \(= \{5\}\); Height \(= 1\) → <b>normal</b> fuzzy set</li>
+<li>Crossover point: \(x = 3\) (μ = 0.5); Boundary \(= \{2, 3, 4, 6, 7\}\)</li>
+<li>\(A_{0.5} = \{3, 4, 5, 6\}\); strong cut \(A_{0.5^+} = \{4, 5, 6\}\); \(A_{0.7} = \{4, 5, 6\}\); \(A_{0.9} = \{4, 5\}\)</li>
+<li>Convex: memberships 0, 0.2, 0.5, 0.9, 1, 0.7, 0.3 rise then fall → <b>convex</b></li>
+</ul>
+\[ |\tilde A| = 0 + 0.2 + 0.5 + 0.9 + 1 + 0.7 + 0.3 = 3.6, \qquad \lVert \tilde A \rVert = \frac{3.6}{7} = 0.514 \]
+<div class="ans">Scalar cardinality 3.6; relative cardinality 0.514</div>
+</div>
+</section>
+
+<!-- ============ 3. OPS ============ -->
+<section class="topic" id="u3-ops">
+<h2>3. Operations on Fuzzy Sets <a class="back" href="#unit3-top">↑ Unit III topics</a></h2>
+<p>Let \(\tilde A\) and \(\tilde B\) be fuzzy sets on universe \(X\). The standard (Zadeh) operations are:</p>
+<table class="left">
+<tr><th>Operation</th><th>Definition (for every \(x \in X\))</th><th>Meaning</th></tr>
+<tr><td><b>Union</b> \(\tilde A \cup \tilde B\)</td><td>\(\mu_{\tilde A \cup \tilde B}(x) = \max[\mu_{\tilde A}(x),\ \mu_{\tilde B}(x)] = \mu_{\tilde A}(x) \vee \mu_{\tilde B}(x)\)</td><td>OR (\(\vee\) = max)</td></tr>
+<tr><td><b>Intersection</b> \(\tilde A \cap \tilde B\)</td><td>\(\mu_{\tilde A \cap \tilde B}(x) = \min[\mu_{\tilde A}(x),\ \mu_{\tilde B}(x)] = \mu_{\tilde A}(x) \wedge \mu_{\tilde B}(x)\)</td><td>AND (\(\wedge\) = min)</td></tr>
+<tr><td><b>Complement</b> \(\bar{\tilde A}\)</td><td>\(\mu_{\bar{\tilde A}}(x) = 1 - \mu_{\tilde A}(x)\)</td><td>NOT</td></tr>
+<tr><td><b>Algebraic sum</b> \(\tilde A + \tilde B\)</td><td>\(\mu_{\tilde A}(x) + \mu_{\tilde B}(x) - \mu_{\tilde A}(x)\,\mu_{\tilde B}(x)\)</td><td>Probabilistic OR</td></tr>
+<tr><td><b>Algebraic product</b> \(\tilde A \cdot \tilde B\)</td><td>\(\mu_{\tilde A}(x)\cdot\mu_{\tilde B}(x)\)</td><td>Product AND</td></tr>
+<tr><td><b>Bounded sum</b> \(\tilde A \oplus \tilde B\)</td><td>\(\min[1,\ \mu_{\tilde A}(x) + \mu_{\tilde B}(x)]\)</td><td></td></tr>
+<tr><td><b>Bounded difference</b> \(\tilde A \odot \tilde B\)</td><td>\(\max[0,\ \mu_{\tilde A}(x) - \mu_{\tilde B}(x)]\)</td><td></td></tr>
+<tr><td><b>Difference</b> \(\tilde A \mid \tilde B\)</td><td>\(\tilde A \cap \bar{\tilde B}\): \(\min[\mu_{\tilde A}(x),\ 1 - \mu_{\tilde B}(x)]\)</td><td>A but not B</td></tr>
+<tr><td><b>Disjunctive sum</b> \(\tilde A \,\triangle\, \tilde B\) (XOR)</td><td>\((\tilde A \cap \bar{\tilde B}) \cup (\bar{\tilde A} \cap \tilde B)\)</td><td>Fuzzy XOR</td></tr>
+<tr><td><b>Equality</b></td><td>\(\tilde A = \tilde B \iff \mu_{\tilde A}(x) = \mu_{\tilde B}(x)\ \forall x\)</td><td></td></tr>
+<tr><td><b>Containment</b> \(\tilde A \subseteq \tilde B\)</td><td>\(\mu_{\tilde A}(x) \le \mu_{\tilde B}(x)\ \forall x\)</td><td>Subset</td></tr>
+<tr><td><b>Cartesian product</b> \(\tilde A \times \tilde B\)</td><td>\(\mu_{\tilde A \times \tilde B}(x, y) = \min[\mu_{\tilde A}(x),\ \mu_{\tilde B}(y)]\)</td><td>Gives a fuzzy relation</td></tr>
+<tr><td><b>Concentration</b> CON(A)</td><td>\([\mu_{\tilde A}(x)]^2\)</td><td>"very"</td></tr>
+<tr><td><b>Dilation</b> DIL(A)</td><td>\([\mu_{\tilde A}(x)]^{0.5}\)</td><td>"somewhat"</td></tr>
+</table>
+<p>max and min are special cases of <b>t-conorms (s-norms)</b> and <b>t-norms</b>. A t-norm \(T(a,b)\) (fuzzy AND) must be commutative, associative, monotonic and satisfy \(T(a, 1) = a\); examples: min, product \(ab\), bounded \(\max(0, a+b-1)\). A t-conorm \(S(a,b)\) (fuzzy OR) satisfies \(S(a, 0) = a\); examples: max, algebraic sum, bounded sum.</p>
+
+<div class="numerical">
+<div class="qt">Numerical 3.1 — All standard operations</div>
+<div class="q">\(\tilde A = \left\{ \frac{1}{x_1} + \frac{0.3}{x_2} + \frac{0.5}{x_3} + \frac{0.2}{x_4} \right\}\), \(\tilde B = \left\{ \frac{0.5}{x_1} + \frac{0.7}{x_2} + \frac{0.2}{x_3} + \frac{0.4}{x_4} \right\}\). Find union, intersection, complements, differences, algebraic sum/product, bounded sum/difference and disjunctive sum.</div>
+<div class="tablewrap"><table>
+<tr><th>Operation</th><th>Formula</th><th>\(x_1\)</th><th>\(x_2\)</th><th>\(x_3\)</th><th>\(x_4\)</th></tr>
+<tr><td>\(\tilde A\)</td><td></td><td>1</td><td>0.3</td><td>0.5</td><td>0.2</td></tr>
+<tr><td>\(\tilde B\)</td><td></td><td>0.5</td><td>0.7</td><td>0.2</td><td>0.4</td></tr>
+<tr class="hl"><td>\(\tilde A \cup \tilde B\)</td><td>max(a, b)</td><td>1</td><td>0.7</td><td>0.5</td><td>0.4</td></tr>
+<tr class="hl"><td>\(\tilde A \cap \tilde B\)</td><td>min(a, b)</td><td>0.5</td><td>0.3</td><td>0.2</td><td>0.2</td></tr>
+<tr><td>\(\bar{\tilde A}\)</td><td>1 − a</td><td>0</td><td>0.7</td><td>0.5</td><td>0.8</td></tr>
+<tr><td>\(\bar{\tilde B}\)</td><td>1 − b</td><td>0.5</td><td>0.3</td><td>0.8</td><td>0.6</td></tr>
+<tr><td>\(\tilde A \mid \tilde B = \tilde A \cap \bar{\tilde B}\)</td><td>min(a, 1 − b)</td><td>0.5</td><td>0.3</td><td>0.5</td><td>0.2</td></tr>
+<tr><td>\(\tilde B \mid \tilde A = \tilde B \cap \bar{\tilde A}\)</td><td>min(b, 1 − a)</td><td>0</td><td>0.7</td><td>0.2</td><td>0.4</td></tr>
+<tr><td>Algebraic sum</td><td>a + b − ab</td><td>1</td><td>0.79</td><td>0.6</td><td>0.52</td></tr>
+<tr><td>Algebraic product</td><td>ab</td><td>0.5</td><td>0.21</td><td>0.1</td><td>0.08</td></tr>
+<tr><td>Bounded sum</td><td>min(1, a + b)</td><td>1</td><td>1</td><td>0.7</td><td>0.6</td></tr>
+<tr><td>Bounded difference</td><td>max(0, a − b)</td><td>0.5</td><td>0</td><td>0.3</td><td>0</td></tr>
+<tr><td>Disjunctive sum</td><td>max(A|B, B|A)</td><td>0.5</td><td>0.7</td><td>0.5</td><td>0.4</td></tr>
+</table></div>
+Sample calculations at \(x_2\): algebraic sum \(= 0.3 + 0.7 - (0.3)(0.7) = 1.0 - 0.21 = 0.79\); bounded sum \(= \min(1, 1.0) = 1\).
+<div class="ans">\(\tilde A \cup \tilde B = \{1/x_1 + 0.7/x_2 + 0.5/x_3 + 0.4/x_4\}\), \(\tilde A \cap \tilde B = \{0.5/x_1 + 0.3/x_2 + 0.2/x_3 + 0.2/x_4\}\)</div>
+</div>
+</section>
+
+<!-- ============ 4. PROPS ============ -->
+<section class="topic" id="u3-props">
+<h2>4. Properties of Fuzzy Sets <a class="back" href="#unit3-top">↑ Unit III topics</a></h2>
+<p>Fuzzy sets (with max, min, 1 − μ) obey almost all laws of crisp sets:</p>
+<table class="left">
+<tr><th>Property</th><th>Law</th></tr>
+<tr><td>Commutativity</td><td>\(\tilde A \cup \tilde B = \tilde B \cup \tilde A,\quad \tilde A \cap \tilde B = \tilde B \cap \tilde A\)</td></tr>
+<tr><td>Associativity</td><td>\(\tilde A \cup (\tilde B \cup \tilde C) = (\tilde A \cup \tilde B) \cup \tilde C,\quad \tilde A \cap (\tilde B \cap \tilde C) = (\tilde A \cap \tilde B) \cap \tilde C\)</td></tr>
+<tr><td>Distributivity</td><td>\(\tilde A \cup (\tilde B \cap \tilde C) = (\tilde A \cup \tilde B) \cap (\tilde A \cup \tilde C),\quad \tilde A \cap (\tilde B \cup \tilde C) = (\tilde A \cap \tilde B) \cup (\tilde A \cap \tilde C)\)</td></tr>
+<tr><td>Idempotency</td><td>\(\tilde A \cup \tilde A = \tilde A,\quad \tilde A \cap \tilde A = \tilde A\)</td></tr>
+<tr><td>Identity</td><td>\(\tilde A \cup \varnothing = \tilde A,\ \ \tilde A \cap X = \tilde A,\ \ \tilde A \cap \varnothing = \varnothing,\ \ \tilde A \cup X = X\)</td></tr>
+<tr><td>Transitivity</td><td>If \(\tilde A \subseteq \tilde B \subseteq \tilde C\) then \(\tilde A \subseteq \tilde C\)</td></tr>
+<tr><td>Involution (double negation)</td><td>\(\bar{\bar{\tilde A}} = \tilde A\)</td></tr>
+<tr><td>Absorption</td><td>\(\tilde A \cup (\tilde A \cap \tilde B) = \tilde A,\quad \tilde A \cap (\tilde A \cup \tilde B) = \tilde A\)</td></tr>
+<tr><td>De Morgan's laws</td><td>\(\overline{\tilde A \cup \tilde B} = \bar{\tilde A} \cap \bar{\tilde B},\quad \overline{\tilde A \cap \tilde B} = \bar{\tilde A} \cup \bar{\tilde B}\)</td></tr>
+<tr class="hl"><td><b>Excluded middle — FAILS</b></td><td>\(\tilde A \cup \bar{\tilde A} \ne X\)</td></tr>
+<tr class="hl"><td><b>Contradiction — FAILS</b></td><td>\(\tilde A \cap \bar{\tilde A} \ne \varnothing\)</td></tr>
+</table>
+<p>The failure of the last two laws is exactly what makes a set "fuzzy": an element can be partly in \(\tilde A\) and partly in its complement at the same time.</p>
+
+<div class="numerical">
+<div class="qt">Numerical 4.1 — Verify De Morgan's law and show failure of excluded middle</div>
+<div class="q">Use \(\tilde A, \tilde B\) from Numerical 3.1.</div>
+<b>De Morgan:</b>
+\[ \overline{\tilde A \cup \tilde B} = 1 - \{1, 0.7, 0.5, 0.4\} = \left\{ \frac{0}{x_1} + \frac{0.3}{x_2} + \frac{0.5}{x_3} + \frac{0.6}{x_4} \right\} \]
+\[ \bar{\tilde A} \cap \bar{\tilde B} = \min(\{0, 0.7, 0.5, 0.8\},\ \{0.5, 0.3, 0.8, 0.6\}) = \left\{ \frac{0}{x_1} + \frac{0.3}{x_2} + \frac{0.5}{x_3} + \frac{0.6}{x_4} \right\} \;✓ \]
+<b>Excluded middle:</b> \(\tilde A \cup \bar{\tilde A} = \max(\{1, 0.3, 0.5, 0.2\}, \{0, 0.7, 0.5, 0.8\}) = \{1, 0.7, 0.5, 0.8\} \ne X = \{1, 1, 1, 1\}\)<br>
+<b>Contradiction:</b> \(\tilde A \cap \bar{\tilde A} = \min(\ldots) = \{0, 0.3, 0.5, 0.2\} \ne \varnothing\)
+<div class="ans">De Morgan holds; excluded middle and contradiction do not</div>
+</div>
+</section>
+
+<!-- ============ 5. RELATIONS ============ -->
+<section class="topic" id="u3-rel">
+<h2>5. Fuzzy Relations <a class="back" href="#unit3-top">↑ Unit III topics</a></h2>
+<h3>5.1 Crisp relation (background)</h3>
+<p>The Cartesian product of crisp sets \(X\) and \(Y\) is \(X \times Y = \{(x, y) \mid x \in X,\ y \in Y\}\). A <b>crisp relation</b> \(R\) is a subset of \(X \times Y\); its characteristic function \(\chi_R(x, y) = 1\) if \((x, y) \in R\), else 0. It can be written as a 0/1 matrix.</p>
+
+<h3>5.2 Fuzzy relation</h3>
+<p>A <b>fuzzy relation</b> \(\tilde R\) is a fuzzy set defined on the Cartesian product \(X \times Y\). Each ordered pair \((x, y)\) has a degree of relationship \(\mu_{\tilde R}(x, y) \in [0, 1]\):</p>
+<div class="formula">\[ \tilde R = \bigl\{\, ((x, y),\ \mu_{\tilde R}(x, y)) \;\big|\; (x, y) \in X \times Y \,\bigr\}, \qquad \mu_{\tilde R} : X \times Y \to [0, 1] \]</div>
+<p>For finite universes \(X = \{x_1, \dots, x_m\}\), \(Y = \{y_1, \dots, y_n\}\), a fuzzy relation is an \(m \times n\) <b>relation matrix</b>:</p>
+<div class="formula">\[ \tilde R = \begin{array}{c|cccc} & y_1 & y_2 & \cdots & y_n \\ \hline x_1 & \mu_R(x_1,y_1) & \mu_R(x_1,y_2) & \cdots & \mu_R(x_1,y_n)\\ \vdots & \vdots & & & \vdots\\ x_m & \mu_R(x_m,y_1) & \mu_R(x_m,y_2) & \cdots & \mu_R(x_m,y_n) \end{array} \]</div>
+<p><i>Example:</i> "x is approximately equal to y", "city x is far from city y", "symptom x indicates disease y".</p>
+
+<h3>5.3 Fuzzy relation from Cartesian product</h3>
+<div class="formula">\[ \tilde R = \tilde A \times \tilde B \;\;\Rightarrow\;\; \mu_{\tilde R}(x, y) = \min\bigl[\mu_{\tilde A}(x),\ \mu_{\tilde B}(y)\bigr] \]</div>
+
+<div class="numerical">
+<div class="qt">Numerical 5.1 — Fuzzy Cartesian product</div>
+<div class="q">\(\tilde A = \left\{ \frac{0.3}{x_1} + \frac{0.7}{x_2} + \frac{1}{x_3} \right\}\), \(\tilde B = \left\{ \frac{0.4}{y_1} + \frac{0.9}{y_2} \right\}\). Find \(\tilde R = \tilde A \times \tilde B\).</div>
+\[ \mu_R(x_1, y_1) = \min(0.3, 0.4) = 0.3,\quad \mu_R(x_1, y_2) = \min(0.3, 0.9) = 0.3 \]
+\[ \mu_R(x_2, y_1) = \min(0.7, 0.4) = 0.4,\quad \mu_R(x_2, y_2) = \min(0.7, 0.9) = 0.7 \]
+\[ \mu_R(x_3, y_1) = \min(1, 0.4) = 0.4,\quad \mu_R(x_3, y_2) = \min(1, 0.9) = 0.9 \]
+\[ \tilde R = \begin{array}{c|cc} & y_1 & y_2 \\ \hline x_1 & 0.3 & 0.3 \\ x_2 & 0.4 & 0.7 \\ x_3 & 0.4 & 0.9 \end{array} \]
+<div class="ans">R = [[0.3, 0.3], [0.4, 0.7], [0.4, 0.9]]</div>
+</div>
+</section>
+
+<!-- ============ 6. CARDINALITY ============ -->
+<section class="topic" id="u3-card">
+<h2>6. Cardinality of Fuzzy Relations <a class="back" href="#unit3-top">↑ Unit III topics</a></h2>
+<h3>6.1 Cardinality of crisp relations</h3>
+<p>If \(X\) has \(n_X\) elements and \(Y\) has \(n_Y\) elements, the Cartesian product has</p>
+<div class="formula">\[ n_{X \times Y} = n_X \cdot n_Y \ \text{elements}, \qquad \text{number of possible crisp relations} = 2^{\,n_X\,n_Y} \]</div>
+<p>(each of the \(n_Xn_Y\) pairs is either in or out of the relation). This number is the cardinality of the <b>power set</b> of \(X \times Y\).</p>
+
+<h3>6.2 Cardinality of fuzzy relations</h3>
+<p>In a fuzzy relation each pair can take <i>any</i> membership value in \([0, 1]\) — an infinite (uncountable) set of values. Therefore</p>
+<div class="formula">\[ \text{cardinality of the set of all fuzzy relations on } X \times Y = \infty \]</div>
+<p>For a <i>particular</i> fuzzy relation we can compute its <b>scalar cardinality</b> just like a fuzzy set:</p>
+<div class="formula">\[ |\tilde R| = \sum_{x \in X}\sum_{y \in Y} \mu_{\tilde R}(x, y), \qquad \lVert \tilde R \rVert = \frac{|\tilde R|}{n_X\,n_Y} \]</div>
+<div class="numerical">
+<div class="qt">Numerical 6.1 — Cardinality</div>
+<div class="q">(a) \(X = \{x_1, x_2, x_3\}\), \(Y = \{y_1, y_2\}\): how many crisp relations are possible? (b) Scalar and relative cardinality of \(\tilde R\) from Numerical 5.1.</div>
+(a) \(n_{X\times Y} = 3 \times 2 = 6\) pairs → \(2^6 = 64\) crisp relations. (Fuzzy relations: infinitely many.)<br>
+(b) \(|\tilde R| = 0.3 + 0.3 + 0.4 + 0.7 + 0.4 + 0.9 = 3.0\), \(\lVert \tilde R \rVert = 3.0 / 6 = 0.5\).
+<div class="ans">64 crisp relations; |R| = 3.0, ‖R‖ = 0.5</div>
+</div>
+</section>
+
+<!-- ============ 7. RELATION OPS ============ -->
+<section class="topic" id="u3-relops">
+<h2>7. Operations on Fuzzy Relations <a class="back" href="#unit3-top">↑ Unit III topics</a></h2>
+<p>Let \(\tilde R\) and \(\tilde S\) be fuzzy relations on \(X \times Y\).</p>
+<table class="left">
+<tr><th>Operation</th><th>Definition</th></tr>
+<tr><td>Union</td><td>\(\mu_{\tilde R \cup \tilde S}(x, y) = \max[\mu_{\tilde R}(x, y),\ \mu_{\tilde S}(x, y)]\)</td></tr>
+<tr><td>Intersection</td><td>\(\mu_{\tilde R \cap \tilde S}(x, y) = \min[\mu_{\tilde R}(x, y),\ \mu_{\tilde S}(x, y)]\)</td></tr>
+<tr><td>Complement</td><td>\(\mu_{\bar{\tilde R}}(x, y) = 1 - \mu_{\tilde R}(x, y)\)</td></tr>
+<tr><td>Containment</td><td>\(\tilde R \subseteq \tilde S \iff \mu_{\tilde R}(x, y) \le \mu_{\tilde S}(x, y)\ \ \forall (x, y)\)</td></tr>
+<tr><td>Inverse (converse)</td><td>\(\mu_{\tilde R^{-1}}(y, x) = \mu_{\tilde R}(x, y)\) — the transpose of the matrix</td></tr>
+<tr><td>Projection on X (1st projection)</td><td>\(\mu_{R_1}(x) = \max_{y}\ \mu_{\tilde R}(x, y)\) — max of each row</td></tr>
+<tr><td>Projection on Y (2nd projection)</td><td>\(\mu_{R_2}(y) = \max_{x}\ \mu_{\tilde R}(x, y)\) — max of each column</td></tr>
+<tr><td>Total projection</td><td>\(\max_x \max_y \mu_{\tilde R}(x, y)\)</td></tr>
+<tr><td>Cylindrical extension</td><td>Extends a fuzzy set \(\tilde A\) on \(X\) to \(X \times Y\): \(\mu_{c(\tilde A)}(x, y) = \mu_{\tilde A}(x)\ \ \forall y\)</td></tr>
+</table>
+
+<div class="numerical">
+<div class="qt">Numerical 7.1 — Operations on two fuzzy relations</div>
+<div class="q">\(\tilde R = \begin{bmatrix} 0.2 & 0.5 & 0.7 \\ 0.9 & 0.4 & 0.1 \end{bmatrix}\), \(\tilde S = \begin{bmatrix} 0.6 & 0.3 & 0.8 \\ 0.5 & 0.7 & 0.2 \end{bmatrix}\) on \(X = \{x_1, x_2\}\), \(Y = \{y_1, y_2, y_3\}\).</div>
+\[ \tilde R \cup \tilde S = \begin{bmatrix} 0.6 & 0.5 & 0.8 \\ 0.9 & 0.7 & 0.2 \end{bmatrix}, \qquad \tilde R \cap \tilde S = \begin{bmatrix} 0.2 & 0.3 & 0.7 \\ 0.5 & 0.4 & 0.1 \end{bmatrix} \]
+\[ \bar{\tilde R} = \begin{bmatrix} 0.8 & 0.5 & 0.3 \\ 0.1 & 0.6 & 0.9 \end{bmatrix}, \qquad \tilde R^{-1} = \tilde R^{T} = \begin{bmatrix} 0.2 & 0.9 \\ 0.5 & 0.4 \\ 0.7 & 0.1 \end{bmatrix} \]
+<b>Containment:</b> \(\tilde R \subseteq \tilde S\)? No, since \(\mu_R(x_2, y_1) = 0.9 \gt 0.5 = \mu_S(x_2, y_1)\).<br>
+<b>Projections of \(\tilde R\):</b> on X: \(\{0.7/x_1 + 0.9/x_2\}\) (row maxima); on Y: \(\{0.9/y_1 + 0.5/y_2 + 0.7/y_3\}\) (column maxima); total projection = 0.9.
+<div class="ans">See matrices above</div>
+</div>
+</section>
+
+<!-- ============ 8. RELATION PROPS ============ -->
+<section class="topic" id="u3-relprops">
+<h2>8. Properties of Fuzzy Relations <a class="back" href="#unit3-top">↑ Unit III topics</a></h2>
+<h3>8.1 Algebraic properties</h3>
+<p>Fuzzy relations, being fuzzy sets on \(X \times Y\), obey: commutativity, associativity, distributivity, idempotency, identity (\(\tilde R \cup \varnothing = \tilde R,\ \tilde R \cap E = \tilde R,\ \tilde R \cap \varnothing = \varnothing,\ \tilde R \cup E = E\), where \(E\) is the whole relation with all entries 1 and \(\varnothing\) the null relation with all entries 0), involution \(\bar{\bar{\tilde R}} = \tilde R\), and De Morgan's laws. As with fuzzy sets, <b>excluded middle and contradiction do not hold</b>: \(\tilde R \cup \bar{\tilde R} \ne E\), \(\tilde R \cap \bar{\tilde R} \ne \varnothing\).</p>
+
+<h3>8.2 Relational properties (relation on \(X \times X\))</h3>
+<table class="left">
+<tr><th>Property</th><th>Condition</th><th>In the matrix</th></tr>
+<tr><td><b>Reflexive</b></td><td>\(\mu_R(x, x) = 1\ \ \forall x\)</td><td>All diagonal entries are 1</td></tr>
+<tr><td><b>Symmetric</b></td><td>\(\mu_R(x, y) = \mu_R(y, x)\)</td><td>Matrix equals its transpose</td></tr>
+<tr><td><b>Transitive (max-min)</b></td><td>\(\mu_R(x, z) \ge \max_{y} \min[\mu_R(x, y),\ \mu_R(y, z)]\)</td><td>\(R \circ R \subseteq R\)</td></tr>
+</table>
+<ul>
+<li><b>Fuzzy tolerance (proximity) relation:</b> reflexive + symmetric.</li>
+<li><b>Fuzzy equivalence (similarity) relation:</b> reflexive + symmetric + transitive.</li>
+<li>A tolerance relation \(R_1\) can be converted into an equivalence relation by composing it with itself at most \(n - 1\) times (\(n\) = number of elements): \(R_1^{\,n-1} = R_1 \circ R_1 \circ \cdots \circ R_1 = R\) (the <b>transitive closure</b>).</li>
+</ul>
+
+<div class="numerical">
+<div class="qt">Numerical 8.1 — Tolerance → Equivalence</div>
+<div class="q">Is \(R_1 = \begin{bmatrix} 1 & 0.8 & 0 \\ 0.8 & 1 & 0.4 \\ 0 & 0.4 & 1 \end{bmatrix}\) an equivalence relation? If not, convert it into one.</div>
+Reflexive ✓ (diagonal = 1). Symmetric ✓ (\(R_1 = R_1^T\)).<br>
+Transitive? Check \((x_1, x_3)\): \(\max[\min(1, 0), \min(0.8, 0.4), \min(0, 1)] = \max[0, 0.4, 0] = 0.4 \gt \mu_R(x_1, x_3) = 0\) ✗ → <b>not transitive</b>, so \(R_1\) is only a <b>tolerance</b> relation.<br>
+Compute \(R_1^2 = R_1 \circ R_1\) (max-min), \(n - 1 = 2\):
+\[ r_{11} = \max(\min(1,1), \min(0.8,0.8), \min(0,0)) = 1,\quad r_{12} = \max(\min(1,0.8), \min(0.8,1), \min(0,0.4)) = 0.8 \]
+\[ r_{13} = \max(\min(1,0), \min(0.8,0.4), \min(0,1)) = 0.4,\quad r_{22} = 1,\quad r_{23} = \max(\min(0.8,0), \min(1,0.4), \min(0.4,1)) = 0.4,\quad r_{33} = 1 \]
+\[ R = R_1^2 = \begin{bmatrix} 1 & 0.8 & 0.4 \\ 0.8 & 1 & 0.4 \\ 0.4 & 0.4 & 1 \end{bmatrix} \]
+Check \(R \circ R\): e.g. \((1,3)\): \(\max(\min(1, 0.4), \min(0.8, 0.4), \min(0.4, 1)) = 0.4\) = \(r_{13}\) ✓; all entries reproduce → \(R \circ R = R\) → transitive.
+<div class="ans">R₁ is tolerance; R₁² is a fuzzy equivalence relation</div>
+</div>
+</section>
+
+<!-- ============ 9. COMPOSITION ============ -->
+<section class="topic" id="u3-comp">
+<h2>9. Fuzzy Composition <a class="back" href="#unit3-top">↑ Unit III topics</a></h2>
+<p>Composition combines two relations that share a common set. If \(\tilde R\) is a relation on \(X \times Y\) and \(\tilde S\) on \(Y \times Z\), their composition \(\tilde T = \tilde R \circ \tilde S\) is a relation on \(X \times Z\) — it answers "how strongly is \(x\) related to \(z\) <i>through some</i> \(y\)?"</p>
+
+<h3>9.1 Max-min composition</h3>
+<div class="formula">\[ \mu_{\tilde T}(x, z) = \bigvee_{y \in Y}\bigl[\mu_{\tilde R}(x, y) \wedge \mu_{\tilde S}(y, z)\bigr] = \max_{y \in Y}\Bigl\{\min\bigl[\mu_{\tilde R}(x, y),\ \mu_{\tilde S}(y, z)\bigr]\Bigr\} \]</div>
+<h3>9.2 Max-product composition</h3>
+<div class="formula">\[ \mu_{\tilde T}(x, z) = \max_{y \in Y}\bigl[\mu_{\tilde R}(x, y)\cdot\mu_{\tilde S}(y, z)\bigr] \]</div>
+<p><b>How to compute:</b> like matrix multiplication, but replace "×" by "min" (or product) and "+" by "max". Row \(i\) of \(R\) is combined with column \(j\) of \(S\).</p>
+
+<h3>9.3 Properties of composition</h3>
+<ul>
+<li>Associative: \((\tilde R \circ \tilde S) \circ \tilde M = \tilde R \circ (\tilde S \circ \tilde M)\)</li>
+<li>Not commutative in general: \(\tilde R \circ \tilde S \ne \tilde S \circ \tilde R\)</li>
+<li>Inverse: \((\tilde R \circ \tilde S)^{-1} = \tilde S^{-1} \circ \tilde R^{-1}\)</li>
+<li>Monotonic: if \(\tilde S \subseteq \tilde M\) then \(\tilde R \circ \tilde S \subseteq \tilde R \circ \tilde M\)</li>
+</ul>
+
+<div class="numerical">
+<div class="qt">Numerical 9.1 — Max-min and max-product composition</div>
+<div class="q">\(\tilde R = \begin{array}{c|cc} & y_1 & y_2 \\ \hline x_1 & 0.6 & 0.3 \\ x_2 & 0.2 & 0.9 \end{array}\), \(\tilde S = \begin{array}{c|ccc} & z_1 & z_2 & z_3 \\ \hline y_1 & 1 & 0.5 & 0.3 \\ y_2 & 0.8 & 0.4 & 0.7 \end{array}\). Find \(\tilde T = \tilde R \circ \tilde S\) by both methods.</div>
+<b>Max-min:</b>
+\[ \mu_T(x_1, z_1) = \max[\min(0.6, 1),\ \min(0.3, 0.8)] = \max[0.6, 0.3] = 0.6 \]
+\[ \mu_T(x_1, z_2) = \max[\min(0.6, 0.5),\ \min(0.3, 0.4)] = \max[0.5, 0.3] = 0.5 \]
+\[ \mu_T(x_1, z_3) = \max[\min(0.6, 0.3),\ \min(0.3, 0.7)] = \max[0.3, 0.3] = 0.3 \]
+\[ \mu_T(x_2, z_1) = \max[\min(0.2, 1),\ \min(0.9, 0.8)] = \max[0.2, 0.8] = 0.8 \]
+\[ \mu_T(x_2, z_2) = \max[\min(0.2, 0.5),\ \min(0.9, 0.4)] = \max[0.2, 0.4] = 0.4 \]
+\[ \mu_T(x_2, z_3) = \max[\min(0.2, 0.3),\ \min(0.9, 0.7)] = \max[0.2, 0.7] = 0.7 \]
+\[ \tilde T_{\text{max-min}} = \begin{bmatrix} 0.6 & 0.5 & 0.3 \\ 0.8 & 0.4 & 0.7 \end{bmatrix} \]
+<b>Max-product:</b>
+\[ \mu_T(x_1, z_1) = \max[0.6 \times 1,\ 0.3 \times 0.8] = \max[0.6, 0.24] = 0.6, \quad \mu_T(x_1, z_2) = \max[0.30, 0.12] = 0.3, \quad \mu_T(x_1, z_3) = \max[0.18, 0.21] = 0.21 \]
+\[ \mu_T(x_2, z_1) = \max[0.2, 0.72] = 0.72, \quad \mu_T(x_2, z_2) = \max[0.10, 0.36] = 0.36, \quad \mu_T(x_2, z_3) = \max[0.06, 0.63] = 0.63 \]
+\[ \tilde T_{\text{max-product}} = \begin{bmatrix} 0.6 & 0.3 & 0.21 \\ 0.72 & 0.36 & 0.63 \end{bmatrix} \]
+<div class="ans">Max-min: [[0.6, 0.5, 0.3], [0.8, 0.4, 0.7]]; Max-product: [[0.6, 0.3, 0.21], [0.72, 0.36, 0.63]]</div>
+</div>
+
+<h3>9.4 Composition of a fuzzy set with a fuzzy relation</h3>
+<p>A fuzzy set \(\tilde A\) on \(X\) composed with \(\tilde R\) on \(X \times Y\) gives a fuzzy set on \(Y\): \( \mu_{\tilde B}(y) = \max_{x}\min[\mu_{\tilde A}(x),\ \mu_{\tilde R}(x, y)] \). This is the basis of the <a href="#u4-infer">compositional rule of inference</a> in Unit IV.</p>
+<div class="numerical">
+<div class="qt">Numerical 9.2 — Set ∘ relation</div>
+<div class="q">Using \(\tilde R\) of Numerical 5.1 and \(\tilde A' = \{0.5/x_1 + 1/x_2 + 0.2/x_3\}\), find \(\tilde B' = \tilde A' \circ \tilde R\).</div>
+\[ \mu_{B'}(y_1) = \max[\min(0.5, 0.3),\ \min(1, 0.4),\ \min(0.2, 0.4)] = \max[0.3, 0.4, 0.2] = 0.4 \]
+\[ \mu_{B'}(y_2) = \max[\min(0.5, 0.3),\ \min(1, 0.7),\ \min(0.2, 0.9)] = \max[0.3, 0.7, 0.2] = 0.7 \]
+<div class="ans">\(\tilde B' = \{0.4/y_1 + 0.7/y_2\}\)</div>
+</div>
+</section>
+
+<!-- ============ 10. REVISION ============ -->
+<section class="topic" id="u3-compare">
+<h2>10. Quick Revision — Unit III <a class="back" href="#unit3-top">↑ Unit III topics</a></h2>
+<div class="note"><b class="h">Formula sheet</b>
+\[ \mu_{A\cup B} = \max(\mu_A, \mu_B),\quad \mu_{A\cap B} = \min(\mu_A, \mu_B),\quad \mu_{\bar A} = 1 - \mu_A,\quad \mu_{A|B} = \min(\mu_A, 1-\mu_B) \]
+\[ \text{Alg. sum } a + b - ab;\ \ \text{Alg. product } ab;\ \ \text{Bounded sum } \min(1, a+b);\ \ \text{Bounded diff } \max(0, a-b) \]
+\[ A_\alpha = \{x \mid \mu_A(x) \ge \alpha\};\quad |A| = \textstyle\sum \mu_A(x);\quad \mu_{A\times B}(x,y) = \min(\mu_A(x), \mu_B(y)) \]
+\[ \text{Max-min: } \mu_{R\circ S}(x,z) = \max_y \min(\mu_R(x,y), \mu_S(y,z));\quad \text{Max-product: } \max_y \mu_R(x,y)\,\mu_S(y,z) \]
+</div>
+<table class="left">
+<tr><th>Concept</th><th>Remember</th></tr>
+<tr><td>Laws that fail</td><td>Excluded middle and contradiction</td></tr>
+<tr><td>Crisp relations on \(X \times Y\)</td><td>\(2^{n_X n_Y}\); fuzzy relations: ∞</td></tr>
+<tr><td>Tolerance</td><td>Reflexive + symmetric</td></tr>
+<tr><td>Equivalence</td><td>Reflexive + symmetric + transitive; obtain via \(R^{n-1}\)</td></tr>
+<tr><td>Inverse relation</td><td>Transpose of matrix</td></tr>
+</table>
+</section>
+</div><!-- /unit3 -->
+
+<!-- =====================================================================
+                                UNIT IV
+     ===================================================================== -->
+<div id="unit4" data-unit-block="unit4">
+<div class="unit-head" id="unit4-top">
+  <h1>Unit IV — Fuzzy Variables, Rules &amp; Fuzzy Inference Systems</h1>
+  <p>Linguistic variables → membership function types → fuzzy IF-THEN rules (Mamdani &amp; Takagi–Sugeno) → FIS: fuzzification, rule base, inference, defuzzification</p>
+</div>
+<div class="toc">
+  <h4>Topics in this unit (click to jump)</h4>
+  <ol>
+    <li><a href="#u4-var">Fuzzy (Linguistic) Variables<small>Definition, term set, linguistic hedges</small></a></li>
+    <li><a href="#u4-mffeat">Features of Membership Functions<small>Core, support, boundary, normal, convex</small></a></li>
+    <li><a href="#u4-mf">Types of Membership Functions<small>Triangular, trapezoidal, Gaussian, bell, sigmoid, S, Z, π</small></a></li>
+    <li><a href="#u4-rules">Fuzzy Rules<small>IF-THEN rules, compound rules, implication, aggregation</small></a></li>
+    <li><a href="#u4-mamdani">Mamdani Fuzzy Model<small>Fuzzy consequents, min implication, max aggregation</small></a></li>
+    <li><a href="#u4-tsk">Takagi–Sugeno (TSK) Model<small>Functional consequents, weighted average</small></a></li>
+    <li><a href="#u4-fis">Fuzzy Inference System<small>Block diagram and working</small></a></li>
+    <li><a href="#u4-fuzzify">Fuzzification<small>Crisp → fuzzy; numerical</small></a></li>
+    <li><a href="#u4-rulebase">Rule Base &amp; Database<small>Knowledge base, rule table</small></a></li>
+    <li><a href="#u4-infer">Inference<small>Compositional rule, firing strength, full worked example</small></a></li>
+    <li><a href="#u4-defuzz">Defuzzification<small>Centroid, weighted average, MOM, centre of sums… numericals</small></a></li>
+    <li><a href="#u4-compare">Comparison &amp; Quick Revision<small>Mamdani vs Sugeno, formula sheet</small></a></li>
+  </ol>
+</div>
+
+<!-- ============ 1. VARIABLES ============ -->
+<section class="topic" id="u4-var">
+<h2>1. Fuzzy (Linguistic) Variables <a class="back" href="#unit4-top">↑ Unit IV topics</a></h2>
+<p>A <b>linguistic variable</b> is a variable whose values are <b>words or sentences</b> rather than numbers — e.g. <i>temperature</i> takes values "cold", "warm", "hot". Each word is represented by a fuzzy set. Zadeh defined it as a quintuple:</p>
+<div class="formula">\[ \bigl(\,x,\ T(x),\ U,\ G,\ M\,\bigr) \]</div>
+<div class="terms"><b class="h">Terms</b><ul>
+<li>\(x\) — name of the variable (e.g. "temperature").</li>
+<li>\(T(x)\) — <b>term set</b>: the set of linguistic values, e.g. {cold, warm, hot, very hot, not cold, …}.</li>
+<li>\(U\) — <b>universe of discourse</b> (e.g. 0 °C to 50 °C).</li>
+<li>\(G\) — <b>syntactic rule</b> (grammar) that generates the terms.</li>
+<li>\(M\) — <b>semantic rule</b> that assigns to each term its meaning, i.e. a fuzzy set (membership function) on \(U\).</li>
+</ul></div>
+<p>A <b>fuzzy variable</b> (in the narrower sense) is a triple \((X, U, R(X))\), where \(X\) is the name, \(U\) the universe and \(R(X)\) a fuzzy subset of \(U\) giving the restriction on values of \(X\) (e.g. X = "old", U = ages 0–100).</p>
+
+<h3>1.1 Linguistic hedges (modifiers)</h3>
+<p>Hedges modify the meaning of a term.</p>
+<table>
+<tr><th>Hedge</th><th>Operation</th><th>Effect</th></tr>
+<tr><td>very A</td><td>\([\mu_A(x)]^2\) (concentration)</td><td>Makes the set narrower/stricter</td></tr>
+<tr><td>extremely A</td><td>\([\mu_A(x)]^3\)</td><td>Even stricter</td></tr>
+<tr><td>very very A</td><td>\([\mu_A(x)]^4\)</td><td></td></tr>
+<tr><td>somewhat / more or less A</td><td>\([\mu_A(x)]^{1/2}\) (dilation)</td><td>Makes the set wider/looser</td></tr>
+<tr><td>slightly A</td><td>\([\mu_A(x)]^{1/3}\)</td><td></td></tr>
+<tr><td>not A</td><td>\(1 - \mu_A(x)\)</td><td>Complement</td></tr>
+<tr><td>indeed A (intensification)</td><td>\(2\mu^2\) if \(\mu \le 0.5\); \(1 - 2(1-\mu)^2\) otherwise</td><td>Pushes values away from 0.5</td></tr>
+</table>
+<div class="numerical">
+<div class="qt">Numerical 1.1 — Applying hedges</div>
+<div class="q">\(\text{tall} = \left\{ \frac{0.2}{160} + \frac{0.5}{170} + \frac{0.8}{180} + \frac{1}{190} \right\}\). Find "very tall", "somewhat tall", "not tall", "not very tall".</div>
+\[ \text{very tall} = \left\{ \frac{0.04}{160} + \frac{0.25}{170} + \frac{0.64}{180} + \frac{1}{190} \right\}\quad (0.2^2 = 0.04,\ 0.5^2 = 0.25,\ 0.8^2 = 0.64) \]
+\[ \text{somewhat tall} = \left\{ \frac{0.447}{160} + \frac{0.707}{170} + \frac{0.894}{180} + \frac{1}{190} \right\}\quad (\sqrt{0.2} = 0.447,\ \sqrt{0.5} = 0.707,\ \sqrt{0.8} = 0.894) \]
+\[ \text{not tall} = \left\{ \frac{0.8}{160} + \frac{0.5}{170} + \frac{0.2}{180} + \frac{0}{190} \right\}, \qquad \text{not very tall} = \left\{ \frac{0.96}{160} + \frac{0.75}{170} + \frac{0.36}{180} + \frac{0}{190} \right\} \]
+<div class="ans">"very" lowers grades, "somewhat" raises them</div>
+</div>
+</section>
+
+<!-- ============ 2. MF FEATURES ============ -->
+<section class="topic" id="u4-mffeat">
+<h2>2. Features of Membership Functions <a class="back" href="#unit4-top">↑ Unit IV topics</a></h2>
+<figure><canvas id="mf-feat" width="460" height="220"></canvas><figcaption>Core (μ = 1), support (μ &gt; 0) and boundaries (0 &lt; μ &lt; 1) of a trapezoidal MF</figcaption></figure>
+<ul>
+<li><b>Core:</b> region where \(\mu_A(x) = 1\).</li>
+<li><b>Support:</b> region where \(\mu_A(x) \gt 0\).</li>
+<li><b>Boundary:</b> region where \(0 \lt \mu_A(x) \lt 1\).</li>
+<li><b>Normal:</b> at least one element with \(\mu = 1\); <b>subnormal</b> otherwise.</li>
+<li><b>Convex:</b> MF is monotonically increasing, then (possibly flat), then monotonically decreasing.</li>
+<li><b>Crossover points:</b> \(\mu_A(x) = 0.5\). <b>Height:</b> maximum membership value.</li>
+<li><b>Prototypical element:</b> element with the highest membership (e.g. peak of triangle).</li>
+</ul>
+<p><b>Methods of assigning membership values:</b> intuition (expert knowledge), inference (from geometry/rules), rank ordering (preferences/polls), angular fuzzy sets, neural networks, genetic algorithms, inductive reasoning (entropy minimisation).</p>
+</section>
+
+<!-- ============ 3. MF TYPES ============ -->
+<section class="topic" id="u4-mf">
+<h2>3. Types of Membership Functions <a class="back" href="#unit4-top">↑ Unit IV topics</a></h2>
+<div class="grid3">
+  <figure><canvas id="mf-tri" width="250" height="170"></canvas><figcaption>(1) Triangular (2, 5, 8)</figcaption></figure>
+  <figure><canvas id="mf-trap" width="250" height="170"></canvas><figcaption>(2) Trapezoidal (1, 3, 6, 9)</figcaption></figure>
+  <figure><canvas id="mf-gauss" width="250" height="170"></canvas><figcaption>(3) Gaussian (c = 5, σ = 2)</figcaption></figure>
+  <figure><canvas id="mf-bell" width="250" height="170"></canvas><figcaption>(4) Generalised bell (a = 2, b = 2, c = 5)</figcaption></figure>
+  <figure><canvas id="mf-sig" width="250" height="170"></canvas><figcaption>(5) Sigmoidal (a = 1, c = 5) and a = −1 (dashed)</figcaption></figure>
+  <figure><canvas id="mf-szp" width="250" height="170"></canvas><figcaption>(6) S-shaped, Z-shaped, π-shaped</figcaption></figure>
+</div>
+
+<h3>3.1 Triangular MF — trimf(x; a, b, c)</h3>
+<div class="formula">\[ \mu(x) = \begin{cases} 0, & x \le a \\ \dfrac{x - a}{b - a}, & a \le x \le b \\ \dfrac{c - x}{c - b}, & b \le x \le c \\ 0, & x \ge c \end{cases} \qquad\text{or compactly}\qquad \mu(x) = \max\!\left(\min\!\left(\frac{x-a}{b-a},\ \frac{c-x}{c-b}\right),\ 0\right) \]
+\(a\) = left foot, \(b\) = peak, \(c\) = right foot (\(a \lt b \lt c\)).</div>
+
+<h3>3.2 Trapezoidal MF — trapmf(x; a, b, c, d)</h3>
+<div class="formula">\[ \mu(x) = \max\!\left(\min\!\left(\frac{x-a}{b-a},\ 1,\ \frac{d-x}{d-c}\right),\ 0\right) \]
+\(a, d\) = feet; \([b, c]\) = flat top (core). Triangular is a special case with \(b = c\).</div>
+
+<h3>3.3 Gaussian MF — gaussmf(x; c, σ)</h3>
+<div class="formula">\[ \mu(x) = \exp\!\left[-\frac{(x - c)^2}{2\sigma^2}\right] \]
+\(c\) = centre, \(\sigma\) = width. Smooth, differentiable everywhere, never exactly zero.</div>
+
+<h3>3.4 Generalised bell MF — gbellmf(x; a, b, c)</h3>
+<div class="formula">\[ \mu(x) = \frac{1}{1 + \left|\dfrac{x - c}{a}\right|^{2b}} \]
+\(c\) = centre, \(a\) = half-width (\(\mu = 0.5\) at \(x = c \pm a\)), \(b\) = controls slope at crossover (slope \(= -b/2a\)).</div>
+
+<h3>3.5 Sigmoidal MF — sigmf(x; a, c)</h3>
+<div class="formula">\[ \mu(x) = \frac{1}{1 + e^{-a(x - c)}} \]
+\(c\) = crossover point (\(\mu = 0.5\)); \(a \gt 0\) opens right ("large"), \(a \lt 0\) opens left ("small").</div>
+
+<h3>3.6 S-shaped, Z-shaped and π-shaped MFs</h3>
+<div class="formula">
+\[ S(x; a, b) = \begin{cases} 0, & x \le a \\ 2\left(\dfrac{x-a}{b-a}\right)^2, & a \le x \le \dfrac{a+b}{2} \\ 1 - 2\left(\dfrac{x-b}{b-a}\right)^2, & \dfrac{a+b}{2} \le x \le b \\ 1, & x \ge b \end{cases} \qquad Z(x; a, b) = 1 - S(x; a, b) \]
+\[ \pi(x; a, b, c, d) = \begin{cases} S(x; a, b), & x \le b \\ 1, & b \le x \le c \\ Z(x; c, d), & x \ge c \end{cases} \]
+</div>
+<h3>3.7 Singleton MF</h3>
+<div class="formula">\[ \mu(x) = \begin{cases} 1, & x = x_0 \\ 0, & \text{otherwise} \end{cases} \]
+Used in singleton fuzzification and as zero-order Sugeno consequents.</div>
+
+<div class="numerical">
+<div class="qt">Numerical 3.1 — Evaluate membership functions</div>
+<div class="q">Find: (a) trimf(3.5; 2, 5, 8) and trimf(7; 2, 5, 8); (b) trapmf(2; 1, 3, 6, 9), trapmf(4), trapmf(7); (c) gaussmf(7; c = 5, σ = 2); (d) gbellmf(6; a = 2, b = 2, c = 5) and at x = 7; (e) sigmf(7; a = 1, c = 5); (f) S(x = 4; a = 2, b = 8).</div>
+(a) \( \mu(3.5) = \dfrac{3.5 - 2}{5 - 2} = \dfrac{1.5}{3} = 0.5 \); \( \mu(7) = \dfrac{8 - 7}{8 - 5} = \dfrac{1}{3} = 0.333 \)<br>
+(b) \( \mu(2) = \dfrac{2-1}{3-1} = 0.5 \); \( \mu(4) = 1 \) (in core [3, 6]); \( \mu(7) = \dfrac{9-7}{9-6} = 0.667 \)<br>
+(c) \( \mu(7) = \exp\!\left[-\dfrac{(7-5)^2}{2(2)^2}\right] = e^{-0.5} = 0.6065 \)<br>
+(d) \( \mu(6) = \dfrac{1}{1 + |0.5|^{4}} = \dfrac{1}{1.0625} = 0.9412 \); \( \mu(7) = \dfrac{1}{1 + |1|^4} = 0.5 \) (crossover at \(c + a\))<br>
+(e) \( \mu(7) = \dfrac{1}{1 + e^{-1(7-5)}} = \dfrac{1}{1 + e^{-2}} = \dfrac{1}{1.1353} = 0.8808 \)<br>
+(f) \((a+b)/2 = 5\); \(x = 4 \le 5\): \( S = 2\left(\dfrac{4-2}{8-2}\right)^2 = 2\left(\dfrac{1}{3}\right)^2 = 0.2222 \)
+<div class="ans">0.5, 0.333 | 0.5, 1, 0.667 | 0.6065 | 0.9412, 0.5 | 0.8808 | 0.2222</div>
+</div>
+</section>
+
+<!-- ============ 4. RULES ============ -->
+<section class="topic" id="u4-rules">
+<h2>4. Fuzzy Rules <a class="back" href="#unit4-top">↑ Unit IV topics</a></h2>
+<p>Human knowledge is expressed as fuzzy <b>IF–THEN rules</b>:</p>
+<div class="formula">\[ \textbf{IF } x \text{ is } A \textbf{ THEN } y \text{ is } B \]</div>
+<ul>
+<li>"\(x\) is \(A\)" — <b>antecedent</b> (premise); \(A\) is a fuzzy set on \(X\).</li>
+<li>"\(y\) is \(B\)" — <b>consequent</b> (conclusion); \(B\) is a fuzzy set on \(Y\) (Mamdani) or a function (Sugeno).</li>
+<li>Example: IF temperature is <i>hot</i> THEN fan speed is <i>fast</i>.</li>
+</ul>
+
+<h3>4.1 Types of rule statements</h3>
+<ul>
+<li><b>Assignment:</b> x = large; "x is not very small".</li>
+<li><b>Conditional:</b> IF x is A THEN y is B.</li>
+<li><b>Unconditional:</b> "goto 5", "stop".</li>
+<li><b>Compound rules</b> use connectives:
+  <ul><li>AND (conjunction): \(\mu_{A_1 \cap A_2} = \min(\mu_{A_1}(x_1),\ \mu_{A_2}(x_2))\) — or product</li>
+      <li>OR (disjunction): \(\mu_{A_1 \cup A_2} = \max(\mu_{A_1}(x_1),\ \mu_{A_2}(x_2))\)</li>
+      <li>NOT: \(1 - \mu_A(x)\)</li></ul></li>
+<li>Rule decomposition: "IF A THEN B ELSE C" = (IF A THEN B) OR (IF NOT A THEN C).</li>
+</ul>
+
+<h3>4.2 Fuzzy implication (meaning of a rule as a relation R)</h3>
+<table class="left">
+<tr><th>Implication</th><th>\(\mu_R(x, y)\)</th></tr>
+<tr><td>Mamdani (min)</td><td>\(\min[\mu_A(x),\ \mu_B(y)]\)</td></tr>
+<tr><td>Larsen (product)</td><td>\(\mu_A(x)\cdot\mu_B(y)\)</td></tr>
+<tr><td>Zadeh (max-min)</td><td>\(\max\{\min[\mu_A(x), \mu_B(y)],\ 1 - \mu_A(x)\}\)</td></tr>
+<tr><td>Łukasiewicz</td><td>\(\min[1,\ 1 - \mu_A(x) + \mu_B(y)]\)</td></tr>
+</table>
+
+<h3>4.3 Aggregation of rules</h3>
+<ul>
+<li><b>Disjunctive system</b> (rules joined by OR/ELSE — usual case): \( \mu_{B}(y) = \max[\mu_{B^1}(y), \mu_{B^2}(y), \dots, \mu_{B^r}(y)] \).</li>
+<li><b>Conjunctive system</b> (all rules must hold — AND): \( \mu_{B}(y) = \min[\mu_{B^1}(y), \dots, \mu_{B^r}(y)] \).</li>
+</ul>
+<p>The two most important rule types — defined by the form of the consequent — are <a href="#u4-mamdani">Mamdani</a> and <a href="#u4-tsk">Takagi–Sugeno</a>.</p>
+</section>
+
+<!-- ============ 5. MAMDANI ============ -->
+<section class="topic" id="u4-mamdani">
+<h2>5. Mamdani Fuzzy Model <a class="back" href="#unit4-top">↑ Unit IV topics</a></h2>
+<p>Proposed by <b>Ebrahim Mamdani (1975)</b> to control a steam engine using rules from human operators. Both antecedent <b>and consequent</b> are fuzzy sets:</p>
+<div class="formula">\[ R_i:\ \textbf{IF } x_1 \text{ is } A_{i1} \textbf{ AND } x_2 \text{ is } A_{i2} \textbf{ THEN } y \text{ is } B_i \]</div>
+<h3>5.1 Steps of Mamdani inference</h3>
+<ol class="steps">
+  <li><b>Fuzzify inputs:</b> find \(\mu_{A_{i1}}(x_1^{*})\), \(\mu_{A_{i2}}(x_2^{*})\) for crisp inputs \(x_1^*, x_2^*\).</li>
+  <li><b>Firing strength</b> of each rule (apply fuzzy operator): \( w_i = \min[\mu_{A_{i1}}(x_1^*),\ \mu_{A_{i2}}(x_2^*)] \) for AND (max for OR).</li>
+  <li><b>Implication:</b> clip (min) the consequent at \(w_i\): \( \mu_{B_i'}(y) = \min[w_i,\ \mu_{B_i}(y)] \) (product implication scales it: \(w_i\,\mu_{B_i}(y)\)).</li>
+  <li><b>Aggregation:</b> combine all clipped consequents with max: \( \mu_{B'}(y) = \max_i\, \mu_{B_i'}(y) \).</li>
+  <li><b>Defuzzification:</b> convert \(\mu_{B'}\) to a crisp output (usually centroid).</li>
+</ol>
+<p>This is the "max-min" Mamdani method. <b>Advantages:</b> intuitive, well suited to human input, widely used. <b>Disadvantage:</b> defuzzification (centroid integral) is computationally heavy. A complete numerical is given in <a href="#u4-infer">Inference</a>.</p>
+</section>
+
+<!-- ============ 6. TSK ============ -->
+<section class="topic" id="u4-tsk">
+<h2>6. Takagi–Sugeno (TSK) Fuzzy Model <a class="back" href="#unit4-top">↑ Unit IV topics</a></h2>
+<p>Proposed by <b>Takagi, Sugeno and Kang (1985)</b>. Antecedents are fuzzy sets, but the <b>consequent is a crisp function</b> of the inputs:</p>
+<div class="formula">\[ R_i:\ \textbf{IF } x \text{ is } A_i \textbf{ AND } y \text{ is } B_i \textbf{ THEN } z_i = f_i(x, y) \]
+<b>First-order Sugeno:</b> \( z_i = p_i\,x + q_i\,y + r_i \) &nbsp;&nbsp; <b>Zero-order Sugeno:</b> \( z_i = k_i \) (constant)
+<br><b>Crisp output</b> (weighted average — no separate defuzzification needed):
+\[ z^{*} = \frac{\sum_{i=1}^{N} w_i\,z_i}{\sum_{i=1}^{N} w_i}, \qquad w_i = \text{firing strength of rule } i \]
+</div>
+<div class="terms"><b class="h">Terms</b><ul>
+<li>\(p_i, q_i, r_i\) — consequent parameters (found by expert or by least squares / ANFIS training).</li>
+<li>\(w_i\) — firing strength (min or product of antecedent memberships).</li>
+<li>Normalised strength \(\bar w_i = w_i / \sum w_j\) gives \(z^* = \sum \bar w_i z_i\).</li>
+</ul></div>
+<p><b>Advantages:</b> computationally efficient, works well with linear/optimisation/adaptive techniques (ANFIS), guarantees continuity of output surface, good for mathematical analysis. <b>Disadvantage:</b> consequents are less intuitive for humans.</p>
+
+<div class="numerical">
+<div class="qt">Numerical 6.1 — Sugeno inference</div>
+<div class="q">Crisp inputs \(T = 28\) °C and \(H = 65\) %. From the fuzzification of <a href="#u4-infer">Section 10</a>, the firing strengths are \(w_1 = 0.25\), \(w_2 = 0.75\), \(w_3 = 0\). First-order consequents: \(z_1 = 0.5T + 0.5H\), \(z_2 = T + 0.8H - 10\), \(z_3 = 10\). Find the output. Also find the output for a zero-order model with \(z_1 = 50,\ z_2 = 80,\ z_3 = 10\).</div>
+\[ z_1 = 0.5(28) + 0.5(65) = 14 + 32.5 = 46.5, \qquad z_2 = 28 + 0.8(65) - 10 = 28 + 52 - 10 = 70 \]
+\[ z^* = \frac{w_1z_1 + w_2z_2 + w_3z_3}{w_1 + w_2 + w_3} = \frac{0.25(46.5) + 0.75(70) + 0(10)}{0.25 + 0.75 + 0} = \frac{11.625 + 52.5}{1} = 64.125 \]
+Zero-order: \( z^* = \dfrac{0.25(50) + 0.75(80)}{1} = 12.5 + 60 = 72.5 \)
+<div class="ans">First-order output = 64.125; zero-order output = 72.5</div>
+</div>
+</section>
+
+<!-- ============ 7. FIS ============ -->
+<section class="topic" id="u4-fis">
+<h2>7. Fuzzy Inference System (FIS) <a class="back" href="#unit4-top">↑ Unit IV topics</a></h2>
+<p>A <b>fuzzy inference system</b> (fuzzy rule-based system / fuzzy controller) maps crisp inputs to crisp outputs using fuzzy set theory, IF-THEN rules and fuzzy reasoning.</p>
+<figure>
+<svg viewBox="0 0 780 250" width="780" height="250">
+  <defs><marker id="fA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#334155"/></marker></defs>
+  <g font-size="14" font-weight="700" text-anchor="middle">
+    <rect x="235" y="20" width="310" height="70" rx="10" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+    <text x="390" y="42">Knowledge Base</text>
+    <rect x="250" y="50" width="130" height="32" rx="6" fill="#fff" stroke="#d97706"/><text x="315" y="71" font-size="13">Database (MFs)</text>
+    <rect x="400" y="50" width="130" height="32" rx="6" fill="#fff" stroke="#d97706"/><text x="465" y="71" font-size="13">Rule Base</text>
+    <rect x="110" y="150" width="150" height="60" rx="10" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/><text x="185" y="185">Fuzzification</text>
+    <rect x="315" y="150" width="150" height="60" rx="10" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/><text x="390" y="178">Inference</text><text x="390" y="196" font-size="12">Engine</text>
+    <rect x="520" y="150" width="150" height="60" rx="10" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/><text x="595" y="185">Defuzzification</text>
+  </g>
+  <g stroke="#334155" stroke-width="1.8" marker-end="url(#fA)" fill="none">
+    <line x1="20" y1="180" x2="106" y2="180"/><line x1="260" y1="180" x2="311" y2="180"/>
+    <line x1="465" y1="180" x2="516" y2="180"/><line x1="670" y1="180" x2="760" y2="180"/>
+    <line x1="390" y1="90" x2="390" y2="146"/><line x1="300" y1="90" x2="200" y2="146"/><line x1="480" y1="90" x2="580" y2="146"/>
+  </g>
+  <g font-size="12" fill="#475569" text-anchor="middle">
+    <text x="60" y="170">crisp input</text><text x="287" y="232">fuzzy input</text><text x="492" y="232">fuzzy output</text><text x="720" y="170">crisp output</text>
+  </g>
+</svg>
+<figcaption>Block diagram of a fuzzy inference system</figcaption>
+</figure>
+<table class="left">
+<tr><th>Block</th><th>Function</th></tr>
+<tr><td><b>Fuzzification interface</b></td><td>Converts crisp inputs into degrees of membership of the linguistic terms.</td></tr>
+<tr><td><b>Database</b></td><td>Defines the membership functions of all fuzzy sets used in the rules.</td></tr>
+<tr><td><b>Rule base</b></td><td>Contains the set of fuzzy IF-THEN rules.</td></tr>
+<tr><td><b>Knowledge base</b></td><td>Database + rule base together.</td></tr>
+<tr><td><b>Inference engine</b> (decision-making unit)</td><td>Applies the rules to the fuzzified inputs (firing strength, implication, aggregation).</td></tr>
+<tr><td><b>Defuzzification interface</b></td><td>Converts the aggregated fuzzy output into a crisp value.</td></tr>
+</table>
+<p><b>Working in five steps:</b> (1) fuzzify inputs → (2) apply fuzzy operator (AND/OR) in antecedents → (3) apply implication to each rule → (4) aggregate all rule outputs → (5) defuzzify. <b>Applications:</b> washing machines, air-conditioners, auto-focus cameras, anti-lock braking, cement kilns, metro train control (Sendai), rice cookers.</p>
+</section>
+
+<!-- ============ 8. FUZZIFICATION ============ -->
+<section class="topic" id="u4-fuzzify">
+<h2>8. Fuzzification <a class="back" href="#unit4-top">↑ Unit IV topics</a></h2>
+<p><b>Fuzzification</b> is the process of converting a crisp quantity into a fuzzy quantity, i.e. finding the degree to which a crisp input belongs to each linguistic term. Measurements contain imprecision (noise, sensor error), so treating them as fuzzy is natural.</p>
+<ul>
+<li><b>Singleton fuzzification:</b> crisp input \(x^*\) is represented by a fuzzy singleton (μ = 1 at \(x^*\) only) — most common; then the membership in term \(A\) is simply \(\mu_A(x^*)\).</li>
+<li><b>Non-singleton (e.g. Gaussian/triangular) fuzzification:</b> input represented by a fuzzy number centred at \(x^*\) to model noise.</li>
+</ul>
+<div class="numerical">
+<div class="qt">Numerical 8.1 — Fuzzify temperature and humidity</div>
+<div class="q">Temperature (°C): Cold = trimf(5, 15, 25), Warm = trimf(15, 25, 35), Hot = trimf(25, 35, 45). Humidity (%): Low = trimf(10, 30, 50), Medium = trimf(30, 50, 70), High = trimf(50, 70, 90). Fuzzify \(T = 28\), \(H = 65\).</div>
+\[ \mu_{Cold}(28) = 0 \ (28 \gt 25),\qquad \mu_{Warm}(28) = \frac{35 - 28}{35 - 25} = 0.7,\qquad \mu_{Hot}(28) = \frac{28 - 25}{35 - 25} = 0.3 \]
+\[ \mu_{Low}(65) = 0,\qquad \mu_{Medium}(65) = \frac{70 - 65}{70 - 50} = 0.25,\qquad \mu_{High}(65) = \frac{65 - 50}{70 - 50} = 0.75 \]
+<div class="grid2">
+<figure><canvas id="fis-temp" width="320" height="200"></canvas><figcaption>Temperature MFs, input T = 28</figcaption></figure>
+<figure><canvas id="fis-hum" width="320" height="200"></canvas><figcaption>Humidity MFs, input H = 65</figcaption></figure>
+</div>
+<div class="ans">T = 28 → {Cold 0, Warm 0.7, Hot 0.3}; H = 65 → {Low 0, Medium 0.25, High 0.75}</div>
+</div>
+</section>
+
+<!-- ============ 9. RULE BASE ============ -->
+<section class="topic" id="u4-rulebase">
+<h2>9. Rule Base &amp; Database <a class="back" href="#unit4-top">↑ Unit IV topics</a></h2>
+<p>The <b>rule base</b> stores all IF-THEN rules; the <b>database</b> stores the definitions (MFs) of all linguistic terms. Rules are obtained from expert knowledge, operator experience, fuzzy models of the process, or learning (neural/GA). For two inputs with \(m\) and \(n\) terms, a complete rule base has at most \(m \times n\) rules, often shown as a <b>Fuzzy Associative Memory (FAM) table</b>.</p>
+<p><b>Desirable properties:</b> <i>completeness</i> (every input combination fires at least one rule), <i>consistency</i> (no contradictory rules with same antecedent and different consequents), <i>continuity</i> (neighbouring rules have neighbouring consequents), and minimal redundancy.</p>
+<h4>Rule base for the fan example (used in Section 10)</h4>
+<table class="left">
+<tr><th>Rule</th><th>Statement</th></tr>
+<tr><td>R1</td><td>IF Temperature is <b>Warm</b> AND Humidity is <b>Medium</b> THEN Speed is <b>Medium</b></td></tr>
+<tr><td>R2</td><td>IF Temperature is <b>Hot</b> OR Humidity is <b>High</b> THEN Speed is <b>Fast</b></td></tr>
+<tr><td>R3</td><td>IF Temperature is <b>Cold</b> THEN Speed is <b>Slow</b></td></tr>
+</table>
+<p>Output Speed (0–100 %): Slow = trimf(0, 25, 50), Medium = trimf(25, 50, 75), Fast = trimf(50, 75, 100).</p>
+<h4>Example FAM table (full rule base, 3 × 3 = 9 rules)</h4>
+<table>
+<tr><th>Temp ↓ / Humidity →</th><th>Low</th><th>Medium</th><th>High</th></tr>
+<tr><th>Cold</th><td>Slow</td><td>Slow</td><td>Medium</td></tr>
+<tr><th>Warm</th><td>Slow</td><td>Medium</td><td>Fast</td></tr>
+<tr><th>Hot</th><td>Medium</td><td>Fast</td><td>Fast</td></tr>
+</table>
+</section>
+
+<!-- ============ 10. INFERENCE ============ -->
+<section class="topic" id="u4-infer">
+<h2>10. Inference <a class="back" href="#unit4-top">↑ Unit IV topics</a></h2>
+<h3>10.1 Compositional rule of inference (Generalised Modus Ponens)</h3>
+<table class="left">
+<tr><th></th><th>Classical Modus Ponens</th><th>Generalised Modus Ponens (fuzzy)</th></tr>
+<tr><td>Rule</td><td>IF x is A THEN y is B</td><td>IF x is A THEN y is B</td></tr>
+<tr><td>Fact</td><td>x is A</td><td>x is A′ (similar to A)</td></tr>
+<tr><td>Conclusion</td><td>y is B</td><td>y is B′ (similar to B)</td></tr>
+</table>
+<div class="formula">\[ \tilde B' = \tilde A' \circ \tilde R, \qquad \mu_{B'}(y) = \max_{x}\,\min\bigl[\mu_{A'}(x),\ \mu_R(x, y)\bigr], \qquad \mu_R(x, y) = \min[\mu_A(x), \mu_B(y)] \ (\text{Mamdani}) \]</div>
+<div class="numerical">
+<div class="qt">Numerical 10.1 — Compositional rule of inference</div>
+<div class="q">Rule: IF x is A THEN y is B, with \(A = \{0.2/x_1 + 1/x_2 + 0.5/x_3\}\), \(B = \{0.6/y_1 + 1/y_2\}\). Given \(A' = \{0.4/x_1 + 0.8/x_2 + 1/x_3\}\), find \(B'\) using Mamdani implication and max-min composition.</div>
+<b>Relation:</b> \( \mu_R(x_i, y_j) = \min[\mu_A(x_i), \mu_B(y_j)] \)
+\[ R = \begin{array}{c|cc} & y_1 & y_2 \\ \hline x_1 & \min(0.2,0.6) = 0.2 & \min(0.2,1) = 0.2 \\ x_2 & \min(1,0.6) = 0.6 & \min(1,1) = 1 \\ x_3 & \min(0.5,0.6) = 0.5 & \min(0.5,1) = 0.5 \end{array} \]
+<b>Composition:</b>
+\[ \mu_{B'}(y_1) = \max[\min(0.4, 0.2),\ \min(0.8, 0.6),\ \min(1, 0.5)] = \max[0.2, 0.6, 0.5] = 0.6 \]
+\[ \mu_{B'}(y_2) = \max[\min(0.4, 0.2),\ \min(0.8, 1),\ \min(1, 0.5)] = \max[0.2, 0.8, 0.5] = 0.8 \]
+<div class="ans">\(B' = \{0.6/y_1 + 0.8/y_2\}\)</div>
+</div>
+
+<h3>10.2 Rule firing (for crisp inputs)</h3>
+<p>With singleton fuzzification, the composition reduces to: <b>firing strength</b> \(w_i\) = degree to which the antecedent is satisfied, then clip the consequent at \(w_i\).</p>
+
+<div class="numerical">
+<div class="qt">Numerical 10.2 — Complete Mamdani FIS (fan speed)</div>
+<div class="q">Using the MFs of <a href="#u4-fuzzify">Numerical 8.1</a> and the rules of <a href="#u4-rulebase">Section 9</a>, find the fan speed for \(T = 28\) °C and \(H = 65\) %.</div>
+<h4>Step 1 — Fuzzification</h4>
+Warm = 0.7, Hot = 0.3, Cold = 0; Medium = 0.25, High = 0.75.
+<h4>Step 2 — Firing strength (fuzzy operators)</h4>
+\[ w_1 = \min(\mu_{Warm}, \mu_{Medium}) = \min(0.7, 0.25) = 0.25 \quad (\text{AND}) \]
+\[ w_2 = \max(\mu_{Hot}, \mu_{High}) = \max(0.3, 0.75) = 0.75 \quad (\text{OR}) \]
+\[ w_3 = \mu_{Cold} = 0 \quad (\text{rule R3 does not fire}) \]
+<h4>Step 3 — Implication (clipping)</h4>
+\[ \mu_{B_1'}(z) = \min[0.25,\ \mu_{Medium}(z)], \qquad \mu_{B_2'}(z) = \min[0.75,\ \mu_{Fast}(z)], \qquad \mu_{B_3'}(z) = 0 \]
+<h4>Step 4 — Aggregation (max)</h4>
+\[ \mu_{B'}(z) = \max\bigl[\min(0.25, \mu_{Medium}(z)),\ \min(0.75, \mu_{Fast}(z))\bigr] \]
+<figure><canvas id="fis-out" width="460" height="230"></canvas><figcaption>Clipped Medium (0.25) and Fast (0.75) consequents; shaded = aggregated output; dashed = defuzzified values</figcaption></figure>
+<h4>Step 5 — Defuzzification (centroid, sampled every 5 units)</h4>
+<div class="tablewrap"><table>
+<tr><th>z</th><td>30</td><td>35</td><td>40</td><td>45</td><td>50</td><td>55</td><td>60</td><td>65</td><td>70</td><td>75</td><td>80</td><td>85</td><td>90</td><td>95</td></tr>
+<tr><th>μ(z)</th><td>0.2</td><td>0.25</td><td>0.25</td><td>0.25</td><td>0.25</td><td>0.25</td><td>0.4</td><td>0.6</td><td>0.75</td><td>0.75</td><td>0.75</td><td>0.6</td><td>0.4</td><td>0.2</td></tr>
+<tr><th>z·μ(z)</th><td>6</td><td>8.75</td><td>10</td><td>11.25</td><td>12.5</td><td>13.75</td><td>24</td><td>39</td><td>52.5</td><td>56.25</td><td>60</td><td>51</td><td>36</td><td>19</td></tr>
+</table></div>
+(μ = 0 at z = 25 and z = 100.) Example: at z = 65, \(\mu_{Medium} = (75-65)/25 = 0.4 \to \min(0.25, 0.4) = 0.25\); \(\mu_{Fast} = (65-50)/25 = 0.6 \to \min(0.75, 0.6) = 0.6\); \(\max = 0.6\).
+\[ z^* = \frac{\sum z\,\mu(z)}{\sum \mu(z)} = \frac{400}{5.9} = 67.80 \]
+(Exact continuous centroid \(= \int z\mu\,dz / \int \mu\,dz = 67.76\) — the sampled value is a very good approximation.)
+<div class="ans">Fan speed ≈ 67.8 % (centroid)</div>
+<p>The same output by other defuzzification methods is computed in <a href="#u4-defuzz">Section 11</a>.</p>
+</div>
+</section>
+
+<!-- ============ 11. DEFUZZ ============ -->
+<section class="topic" id="u4-defuzz">
+<h2>11. Defuzzification <a class="back" href="#unit4-top">↑ Unit IV topics</a></h2>
+<p><b>Defuzzification</b> converts the aggregated fuzzy output \(\mu_{B'}(z)\) into a single crisp value \(z^*\) that can drive an actuator. It is the reverse of fuzzification (also called "rounding off").</p>
+
+<h3>11.1 Methods</h3>
+<table class="left">
+<tr><th>Method</th><th>Formula / rule</th><th>Notes</th></tr>
+<tr><td><b>Max-membership (height)</b></td><td>\(\mu(z^*) \ge \mu(z)\ \ \forall z\)</td><td>Only for peaked outputs; fast</td></tr>
+<tr><td><b>Centroid (centre of gravity / area)</b></td><td>\( z^* = \dfrac{\int \mu(z)\,z\,dz}{\int \mu(z)\,dz} \); discrete: \( \dfrac{\sum \mu(z_i)\,z_i}{\sum \mu(z_i)} \)</td><td>Most common, most accurate; expensive</td></tr>
+<tr><td><b>Weighted average</b></td><td>\( z^* = \dfrac{\sum \mu(\bar z_i)\,\bar z_i}{\sum \mu(\bar z_i)} \), \(\bar z_i\) = centre of each symmetric output MF</td><td>Only valid for symmetric MFs; very fast</td></tr>
+<tr><td><b>Mean of maxima (MOM)</b></td><td>\( z^* = \dfrac{\sum_{i=1}^{n} z_i}{n} \) over points where μ is max; for an interval \([a, b]\): \(z^* = \dfrac{a+b}{2}\)</td><td>Middle of maximum</td></tr>
+<tr><td><b>First / last of maxima</b></td><td>Smallest / largest \(z\) where μ is maximum</td><td></td></tr>
+<tr><td><b>Centre of sums (COS)</b></td><td>\( z^* = \dfrac{\int z \sum_{k} \mu_{B_k}(z)\,dz}{\int \sum_k \mu_{B_k}(z)\,dz} = \dfrac{\sum_k A_k\,\bar z_k}{\sum_k A_k} \)</td><td>Adds individual clipped areas (overlaps counted twice); fast</td></tr>
+<tr><td><b>Centre of largest area</b></td><td>Centroid of the largest convex sub-region</td><td>For non-convex outputs</td></tr>
+</table>
+
+<div class="numerical">
+<div class="qt">Numerical 11.1 — Fan example by other methods</div>
+<div class="q">For the aggregated output of Numerical 10.2 (Medium clipped at 0.25, centre 50; Fast clipped at 0.75, centre 75), find the output by weighted average, MOM, first/last of maxima and centre of sums.</div>
+<b>Weighted average:</b>
+\[ z^* = \frac{0.25(50) + 0.75(75)}{0.25 + 0.75} = \frac{12.5 + 56.25}{1} = 68.75 \]
+<b>Mean of maxima:</b> max μ = 0.75 where \(\mu_{Fast}(z) \ge 0.75\): \(\frac{z - 50}{25} \ge 0.75 \Rightarrow z \ge 68.75\) and \(\frac{100 - z}{25} \ge 0.75 \Rightarrow z \le 81.25\).
+\[ z^*_{MOM} = \frac{68.75 + 81.25}{2} = 75, \qquad \text{FOM} = 68.75, \qquad \text{LOM} = 81.25 \]
+<b>Centre of sums:</b> a triangle of base 50 clipped at height \(h\) is a trapezoid with area \( A = \frac{h}{2}[50 + 50(1 - h)] = 25h(2 - h) \).
+\[ A_1 = 25(0.25)(1.75) = 10.9375,\quad A_2 = 25(0.75)(1.25) = 23.4375 \]
+\[ z^*_{COS} = \frac{10.9375(50) + 23.4375(75)}{10.9375 + 23.4375} = \frac{546.875 + 1757.8125}{34.375} = \frac{2304.6875}{34.375} = 67.05 \]
+<div class="ans">Centroid 67.8 | Weighted avg 68.75 | MOM 75 | FOM 68.75 | LOM 81.25 | COS 67.05</div>
+</div>
+
+<div class="numerical">
+<div class="qt">Numerical 11.2 — Centroid by integration</div>
+<div class="q">The aggregated output is \( \mu(z) = 0.5z\ (0 \le z \le 1);\ 0.5\ (1 \le z \le 3);\ 0.5z - 1\ (3 \le z \le 4);\ 1\ (4 \le z \le 5);\ 6 - z\ (5 \le z \le 6) \). Find the centroid and mean of maxima.</div>
+<figure><canvas id="defz-shape" width="420" height="210"></canvas><figcaption>Aggregated output shape; dashed = centroid (3.43) and MOM (4.5)</figcaption></figure>
+<b>Area</b> \(\int \mu\,dz\):
+\[ \int_0^1 0.5z\,dz = 0.25,\quad \int_1^3 0.5\,dz = 1,\quad \int_3^4 (0.5z - 1)\,dz = \left[0.25z^2 - z\right]_3^4 = 0 - (-0.75) = 0.75 \]
+\[ \int_4^5 1\,dz = 1,\quad \int_5^6 (6 - z)\,dz = \left[6z - \tfrac{z^2}{2}\right]_5^6 = 18 - 17.5 = 0.5 \qquad \Rightarrow \text{Total} = 3.5 \]
+<b>Moment</b> \(\int z\,\mu\,dz\):
+\[ \int_0^1 0.5z^2\,dz = \tfrac{1}{6} = 0.1667,\quad \int_1^3 0.5z\,dz = \left[\tfrac{z^2}{4}\right]_1^3 = 2,\quad \int_3^4 (0.5z^2 - z)\,dz = \left[\tfrac{z^3}{6} - \tfrac{z^2}{2}\right]_3^4 = 2.6667 \]
+\[ \int_4^5 z\,dz = \left[\tfrac{z^2}{2}\right]_4^5 = 4.5,\quad \int_5^6 (6z - z^2)\,dz = \left[3z^2 - \tfrac{z^3}{3}\right]_5^6 = 36 - 33.3333 = 2.6667 \qquad \Rightarrow \text{Total} = 12.0 \]
+\[ z^* = \frac{12.0}{3.5} = 3.4286 \qquad\qquad \text{MOM} = \frac{4 + 5}{2} = 4.5 \]
+<div class="ans">Centroid z* = 3.43, MOM = 4.5 (FOM = 4, LOM = 5)</div>
+</div>
+
+<h3>11.2 Criteria for choosing a method</h3>
+<p>Continuity (small input change → small output change), disambiguity (unique value), plausibility (lies near the middle of the support with high membership), computational simplicity, and weighting of rule outputs. Centroid satisfies most criteria; weighted average and COS are preferred when speed matters.</p>
+</section>
+
+<!-- ============ 12. COMPARE ============ -->
+<section class="topic" id="u4-compare">
+<h2>12. Comparison &amp; Quick Revision — Unit IV <a class="back" href="#unit4-top">↑ Unit IV topics</a></h2>
+<table class="left">
+<tr><th>Feature</th><th>Mamdani</th><th>Takagi–Sugeno</th></tr>
+<tr><td>Consequent</td><td>Fuzzy set</td><td>Crisp function (linear/constant)</td></tr>
+<tr><td>Output</td><td>Fuzzy → needs defuzzification</td><td>Weighted average (crisp directly)</td></tr>
+<tr><td>Interpretability</td><td>High (human-like)</td><td>Lower</td></tr>
+<tr><td>Computation</td><td>Heavy (centroid)</td><td>Efficient</td></tr>
+<tr><td>Suited for</td><td>Expert systems, human-knowledge capture</td><td>Control, adaptive/optimisation (ANFIS), modelling</td></tr>
+<tr><td>Output surface</td><td>May be less smooth</td><td>Continuous</td></tr>
+</table>
+<div class="note"><b class="h">Formula sheet</b>
+\[ \text{trimf} = \max\!\left(\min\!\left(\tfrac{x-a}{b-a}, \tfrac{c-x}{c-b}\right), 0\right);\ \ \text{trapmf} = \max\!\left(\min\!\left(\tfrac{x-a}{b-a}, 1, \tfrac{d-x}{d-c}\right), 0\right);\ \ \text{Gauss} = e^{-\frac{(x-c)^2}{2\sigma^2}};\ \ \text{bell} = \frac{1}{1 + |\frac{x-c}{a}|^{2b}} \]
+\[ w_i = \min(\mu_{A_i}(x), \mu_{B_i}(y));\quad \text{Mamdani: } \mu_{B'} = \max_i \min(w_i, \mu_{B_i});\quad \text{Sugeno: } z^* = \frac{\sum w_i z_i}{\sum w_i} \]
+\[ \text{Centroid: } z^* = \frac{\int \mu(z)z\,dz}{\int \mu(z)\,dz};\quad \text{Weighted avg: } \frac{\sum \mu(\bar z)\bar z}{\sum \mu(\bar z)};\quad \text{MOM: } \frac{a+b}{2} \]
+</div>
+</section>
+</div><!-- /unit4 -->
+
+<!-- =====================================================================
+                                UNIT V
+     ===================================================================== -->
+<div id="unit5" data-unit-block="unit5">
+<div class="unit-head" id="unit5-top">
+  <h1>Unit V — Genetic Algorithms</h1>
+  <p>Biological terminology → elements of GA (encoding, selection, crossover, mutation, reinsertion) → simple GA → schema, fundamental theorem, building block hypothesis</p>
+</div>
+<div class="toc">
+  <h4>Topics in this unit (click to jump)</h4>
+  <ol>
+    <li><a href="#u5-intro">Introduction to Genetic Algorithms<small>Idea, history, GA vs traditional methods</small></a></li>
+    <li><a href="#u5-bio">Biological Terminology<small>Cell, chromosome, gene, allele, genotype, phenotype…</small></a></li>
+    <li><a href="#u5-elements">Elements of GA<small>Population, fitness function, operators, parameters</small></a></li>
+    <li><a href="#u5-enc">Encoding<small>Binary, octal, hex, permutation, value, tree + numericals</small></a></li>
+    <li><a href="#u5-sel">Types of Selection<small>Roulette, rank, tournament, SUS, Boltzmann, elitism…</small></a></li>
+    <li><a href="#u5-cross">Types of Crossover<small>Single/two/multi-point, uniform, three-parent, PMX, OX, CX</small></a></li>
+    <li><a href="#u5-mut">Mutation<small>Flipping, interchanging, reversing, inversion</small></a></li>
+    <li><a href="#u5-reins">Reinsertion<small>Pure, uniform, elitist, fitness-based</small></a></li>
+    <li><a href="#u5-sga">A Simple Genetic Algorithm<small>Algorithm, flowchart, full numerical (maximise x²)</small></a></li>
+    <li><a href="#u5-schema">Schema<small>Order, defining length, counting schemata</small></a></li>
+    <li><a href="#u5-theorem">Fundamental Theorem of GA<small>Schema theorem derivation + numerical</small></a></li>
+    <li><a href="#u5-bbh">Building Block Hypothesis<small>Building blocks, implicit parallelism</small></a></li>
+    <li><a href="#u5-compare">Quick Revision<small>Advantages, applications, formula sheet</small></a></li>
+  </ol>
+</div>
+
+<!-- ============ 1. INTRO ============ -->
+<section class="topic" id="u5-intro">
+<h2>1. Introduction to Genetic Algorithms <a class="back" href="#unit5-top">↑ Unit V topics</a></h2>
+<p>A <b>Genetic Algorithm (GA)</b> is an adaptive, heuristic <b>search and optimisation</b> technique based on Darwin's principle of <b>natural selection</b> ("survival of the fittest") and on genetics. It was developed by <b>John Holland (1975)</b>, University of Michigan, and popularised by his student <b>David Goldberg (1989)</b>.</p>
+<p>A GA maintains a <b>population</b> of candidate solutions (encoded as chromosomes). In each <b>generation</b>, fitter individuals are more likely to be <b>selected</b> to reproduce; their chromosomes are recombined by <b>crossover</b> and randomly altered by <b>mutation</b> to form offspring, which are <b>reinserted</b> into the population. Over generations, the population evolves towards better solutions.</p>
+
+<h3>1.1 GA vs traditional optimisation methods</h3>
+<table class="left">
+<tr><th>Genetic Algorithm</th><th>Traditional (calculus / enumerative) methods</th></tr>
+<tr><td>Works with a <b>coding</b> of the parameter set, not the parameters themselves</td><td>Works directly with parameters</td></tr>
+<tr><td>Searches from a <b>population</b> of points (parallel)</td><td>Searches from a single point</td></tr>
+<tr><td>Uses only the <b>objective (fitness) function</b> — no derivatives</td><td>Often needs derivatives / auxiliary knowledge</td></tr>
+<tr><td>Uses <b>probabilistic</b> transition rules</td><td>Uses deterministic rules</td></tr>
+<tr><td>Less likely to get trapped in local optima</td><td>Can get stuck in local optima</td></tr>
+<tr><td>Gives a set of good solutions</td><td>Gives one solution</td></tr>
+</table>
+</section>
+
+<!-- ============ 2. BIO ============ -->
+<section class="topic" id="u5-bio">
+<h2>2. Biological Terminology <a class="back" href="#unit5-top">↑ Unit V topics</a></h2>
+<table class="left">
+<tr><th>Biological term</th><th>Meaning in biology</th><th>Meaning in GA</th></tr>
+<tr><td><b>Cell</b></td><td>Basic unit of life; each cell contains the same set of chromosomes.</td><td>—</td></tr>
+<tr><td><b>Chromosome</b></td><td>String of DNA carrying genetic information.</td><td>An encoded candidate solution (string), e.g. <span class="mono">10110</span>.</td></tr>
+<tr><td><b>Gene</b></td><td>Block of DNA that encodes a particular trait (e.g. eye colour).</td><td>One element/position of the string (a bit or a group of bits encoding one variable).</td></tr>
+<tr><td><b>Allele</b></td><td>Possible value of a gene (blue, brown).</td><td>Value a gene can take, e.g. 0 or 1.</td></tr>
+<tr><td><b>Locus</b></td><td>Position of a gene on the chromosome.</td><td>Position in the string.</td></tr>
+<tr><td><b>Genome</b></td><td>Complete set of genetic material (all chromosomes).</td><td>Complete set of strings for one solution.</td></tr>
+<tr><td><b>Genotype</b></td><td>Particular set of genes in a genome.</td><td>The coded string (e.g. <span class="mono">01101</span>).</td></tr>
+<tr><td><b>Phenotype</b></td><td>Physical/mental characteristics resulting from genotype.</td><td>The decoded solution (e.g. x = 13).</td></tr>
+<tr><td><b>Population</b></td><td>Group of individuals of a species.</td><td>Set of candidate strings.</td></tr>
+<tr><td><b>Fitness</b></td><td>Ability to survive and reproduce.</td><td>Value of the objective/fitness function.</td></tr>
+<tr><td><b>Reproduction / Selection</b></td><td>Fitter organisms produce more offspring.</td><td>Choosing parents in proportion to fitness.</td></tr>
+<tr><td><b>Crossover (recombination)</b></td><td>Genes from both parents combine to form new chromosome.</td><td>Exchange of substrings between two parents.</td></tr>
+<tr><td><b>Mutation</b></td><td>Random change (copying error) in DNA.</td><td>Random alteration of a gene (e.g. bit flip).</td></tr>
+<tr><td><b>Natural selection</b></td><td>Survival of the fittest.</td><td>Better strings survive to next generation.</td></tr>
+</table>
+</section>
+
+<!-- ============ 3. ELEMENTS ============ -->
+<section class="topic" id="u5-elements">
+<h2>3. Elements of GA <a class="back" href="#unit5-top">↑ Unit V topics</a></h2>
+<ul>
+<li><b>Search space:</b> the set of all possible solutions; each point is represented by a chromosome.</li>
+<li><b>Population:</b> subset of solutions in the current generation; size \(N\) (typically 20–200). Initialised randomly (or heuristically).</li>
+<li><b>Encoding:</b> how a solution is represented as a chromosome (<a href="#u5-enc">§4</a>).</li>
+<li><b>Fitness function \(f(x)\):</b> measures the quality of a solution. For maximisation, fitness = objective \(F(x)\). For minimisation, convert, e.g.
+   \[ f(x) = \frac{1}{1 + F(x)} \quad\text{or}\quad f(x) = C_{max} - F(x) \]
+   Fitness must be non-negative for proportional selection.</li>
+<li><b>Genetic operators:</b> <a href="#u5-sel">selection</a>, <a href="#u5-cross">crossover</a>, <a href="#u5-mut">mutation</a>, <a href="#u5-reins">reinsertion</a>.</li>
+<li><b>Parameters:</b> population size \(N\), crossover probability \(p_c\) (0.6–0.9), mutation probability \(p_m\) (0.001–0.01, often \(1/L\)), number of generations, generation gap.</li>
+<li><b>Termination:</b> maximum generations reached, satisfactory fitness found, no improvement for several generations, or population converged.</li>
+</ul>
+</section>
+
+<!-- ============ 4. ENCODING ============ -->
+<section class="topic" id="u5-enc">
+<h2>4. Encoding <a class="back" href="#unit5-top">↑ Unit V topics</a></h2>
+<p><b>Encoding</b> is the representation of a solution (phenotype) as a chromosome (genotype). The choice depends on the problem.</p>
+<table class="left">
+<tr><th>Encoding</th><th>Description</th><th>Example</th><th>Used for</th></tr>
+<tr><td><b>Binary</b></td><td>String of 0s and 1s (most common, Holland)</td><td><span class="mono">1011001</span></td><td>Knapsack, numeric optimisation</td></tr>
+<tr><td><b>Octal</b></td><td>Digits 0–7</td><td><span class="mono">03467216</span></td><td></td></tr>
+<tr><td><b>Hexadecimal</b></td><td>Digits 0–9, A–F</td><td><span class="mono">9CE7</span></td><td></td></tr>
+<tr><td><b>Permutation (real number)</b></td><td>String of numbers representing an order</td><td><span class="mono">1 5 3 2 6 4 7 9 8</span></td><td>Travelling salesman, scheduling</td></tr>
+<tr><td><b>Value</b></td><td>Real numbers, characters or objects</td><td><span class="mono">1.23 5.32 0.34</span>; <span class="mono">ABDJEIF</span>; (back),(left)</td><td>Neural-network weights</td></tr>
+<tr><td><b>Tree</b></td><td>Chromosome is a tree of functions/commands</td><td>( + x ( / 5 y ) )</td><td>Genetic programming</td></tr>
+</table>
+
+<h3>4.1 Binary decoding of a real variable</h3>
+<div class="formula">\[ x = x_{min} + \frac{x_{max} - x_{min}}{2^{L} - 1}\times \text{DV}(s), \qquad \text{precision} = \frac{x_{max} - x_{min}}{2^{L} - 1} \]
+Required string length for precision \(\varepsilon\): \( 2^{L} - 1 \ge \dfrac{x_{max} - x_{min}}{\varepsilon} \Rightarrow L \ge \log_2\!\left(\dfrac{x_{max} - x_{min}}{\varepsilon} + 1\right) \)</div>
+<div class="terms"><b class="h">Terms</b><ul><li>\(L\) — number of bits; \(\text{DV}(s)\) — decimal value of the binary string \(s\); \([x_{min}, x_{max}]\) — variable range.</li><li>For multiple variables, concatenate their binary sub-strings into one chromosome.</li></ul></div>
+
+<div class="numerical">
+<div class="qt">Numerical 4.1 — Decode a binary string</div>
+<div class="q">\(x \in [0, 10]\) is coded with \(L = 5\) bits. Decode <span class="mono">10110</span> and give the precision.</div>
+\[ \text{DV}(10110) = 1\cdot2^4 + 0\cdot2^3 + 1\cdot2^2 + 1\cdot2^1 + 0\cdot2^0 = 16 + 4 + 2 = 22 \]
+\[ x = 0 + \frac{10 - 0}{2^5 - 1}\times 22 = \frac{10}{31}\times 22 = 7.097, \qquad \text{precision} = \frac{10}{31} = 0.3226 \]
+<div class="ans">x = 7.097; precision 0.3226</div>
+</div>
+<div class="numerical">
+<div class="qt">Numerical 4.2 — Bits needed</div>
+<div class="q">\(x \in [-1, 2]\) is required to six decimal places. How many bits?</div>
+Range = 3, so we need \(3 \times 10^{6}\) intervals: \( 2^{L} - 1 \ge 3{,}000{,}000 \). Since \(2^{21} = 2{,}097{,}152 \lt 3{,}000{,}000 \le 2^{22} = 4{,}194{,}304\):
+<div class="ans">L = 22 bits</div>
+</div>
+</section>
+
+<!-- ============ 5. SELECTION ============ -->
+<section class="topic" id="u5-sel">
+<h2>5. Types of Selection <a class="back" href="#unit5-top">↑ Unit V topics</a></h2>
+<p><b>Selection</b> chooses individuals from the current population to become parents (the <b>mating pool</b>). It gives better individuals more chances. <b>Selection pressure</b> = degree to which better individuals are favoured: high pressure → fast but premature convergence; low pressure → slow progress.</p>
+
+<h3>5.1 Roulette wheel selection (fitness-proportionate)</h3>
+<p>Each individual gets a slice of a wheel proportional to its fitness; the wheel is spun \(N\) times.</p>
+<div class="formula">\[ p_i = \frac{f_i}{\sum_{j=1}^{N} f_j}, \qquad \text{expected count}_i = N\,p_i = \frac{f_i}{\bar f}, \qquad \bar f = \frac{1}{N}\sum_j f_j \]
+Implementation: compute cumulative probabilities \(q_i = \sum_{j \le i} p_j\); generate \(r \in [0, 1)\); select the first \(i\) with \(r \lt q_i\).</div>
+<p><b>Drawback:</b> a super-fit individual can dominate (premature convergence); fails when fitness values are very close.</p>
+
+<div class="numerical">
+<div class="qt">Numerical 5.1 — Roulette wheel</div>
+<div class="q">Four individuals A, B, C, D have fitness 50, 25, 15, 10. Find selection probabilities, expected counts, and the individuals chosen for random numbers 0.62, 0.08, 0.93, 0.41.</div>
+<div class="grid2">
+<div>
+\[ \sum f = 50 + 25 + 15 + 10 = 100, \quad \bar f = 25 \]
+<table>
+<tr><th>Ind.</th><th>\(f_i\)</th><th>\(p_i\)</th><th>\(q_i\) (cumulative)</th><th>Expected \(f_i/\bar f\)</th></tr>
+<tr><td>A</td><td>50</td><td>0.50</td><td>0.50</td><td>2.0</td></tr>
+<tr><td>B</td><td>25</td><td>0.25</td><td>0.75</td><td>1.0</td></tr>
+<tr><td>C</td><td>15</td><td>0.15</td><td>0.90</td><td>0.6</td></tr>
+<tr><td>D</td><td>10</td><td>0.10</td><td>1.00</td><td>0.4</td></tr>
+</table>
+</div>
+<figure><canvas id="ga-wheel" width="260" height="240"></canvas><figcaption>Roulette wheel slices ∝ fitness</figcaption></figure>
+</div>
+r = 0.62 → 0.50 ≤ r &lt; 0.75 → <b>B</b>; r = 0.08 → <b>A</b>; r = 0.93 → <b>D</b>; r = 0.41 → <b>A</b>.
+<div class="ans">Mating pool = {B, A, D, A}</div>
+</div>
+
+<h3>5.2 Random selection</h3>
+<p>Parents are chosen uniformly at random, ignoring fitness — no selection pressure; rarely used alone.</p>
+
+<h3>5.3 Rank selection</h3>
+<p>Individuals are sorted by fitness and assigned ranks (worst = 1, best = \(N\)); selection probability depends on <b>rank</b>, not raw fitness. Prevents domination when fitness differences are huge and keeps pressure when they are tiny.</p>
+<div class="formula">\[ p_i = \frac{\text{rank}_i}{\sum_j \text{rank}_j} = \frac{\text{rank}_i}{N(N+1)/2} \qquad\text{(linear ranking, Baker: } p_i = \tfrac{1}{N}\bigl[\eta^- + (\eta^+ - \eta^-)\tfrac{i-1}{N-1}\bigr],\ \eta^- = 2 - \eta^+,\ 1 \le \eta^+ \le 2) \]</div>
+<div class="numerical">
+<div class="qt">Numerical 5.2 — Rank selection</div>
+<div class="q">For A = 50, B = 25, C = 15, D = 10, find rank-based probabilities.</div>
+Ranks: D = 1, C = 2, B = 3, A = 4; \(\sum \text{rank} = 10\).
+\[ p_A = 4/10 = 0.4,\quad p_B = 0.3,\quad p_C = 0.2,\quad p_D = 0.1 \]
+<div class="ans">A's share drops from 0.50 (roulette) to 0.40 — less domination</div>
+</div>
+
+<h3>5.4 Tournament selection</h3>
+<p>Pick \(k\) individuals at random (tournament size, usually 2); the best of them becomes a parent. Repeat \(N\) times. Selection pressure increases with \(k\). Efficient, works for negative fitness, easy to parallelise.</p>
+<div class="numerical">
+<div class="qt">Numerical 5.3 — Binary tournament (k = 2)</div>
+<div class="q">Random pairs drawn: (B, D), (A, C), (C, D), (A, B).</div>
+Winners: B (25 &gt; 10), A (50 &gt; 15), C (15 &gt; 10), A (50 &gt; 25).
+<div class="ans">Mating pool = {B, A, C, A}</div>
+</div>
+
+<h3>5.5 Stochastic Universal Sampling (SUS)</h3>
+<p>One spin of a wheel with \(N\) equally spaced pointers (spacing \(1/N\)). Start pointer \(r \in [0, 1/N)\); pointers at \(r, r + 1/N, r + 2/N, \dots\). Zero bias and minimum spread compared to roulette.</p>
+<div class="numerical">
+<div class="qt">Numerical 5.4 — SUS</div>
+<div class="q">Same four individuals, \(N = 4\), start \(r = 0.1\).</div>
+Pointers: 0.10, 0.35, 0.60, 0.85. Cumulative ranges: A [0, 0.5), B [0.5, 0.75), C [0.75, 0.9), D [0.9, 1).
+<div class="ans">Selected = {A, A, B, C} — exactly matches expected counts (2, 1, 0.6, 0.4) as closely as possible</div>
+</div>
+
+<h3>5.6 Boltzmann selection</h3>
+<p>Inspired by simulated annealing: selection pressure is controlled by a <b>temperature</b> \(T\) that decreases over generations (low pressure early → exploration; high pressure later → exploitation).</p>
+<div class="formula">\[ p_i = \frac{e^{f_i / T}}{\sum_{j} e^{f_j / T}} \]</div>
+<div class="numerical">
+<div class="qt">Numerical 5.5 — Boltzmann probabilities</div>
+<div class="q">Fitness 50, 25, 15, 10. Find \(p_i\) for \(T = 100\) and \(T = 25\).</div>
+\(T = 100\): \(e^{0.5} = 1.6487,\ e^{0.25} = 1.2840,\ e^{0.15} = 1.1618,\ e^{0.1} = 1.1052\); sum = 5.1997
+\[ p = [0.3171,\ 0.2469,\ 0.2234,\ 0.2126] \quad(\text{nearly uniform}) \]
+\(T = 25\): \(e^{2} = 7.3891,\ e^{1} = 2.7183,\ e^{0.6} = 1.8221,\ e^{0.4} = 1.4918\); sum = 13.4213
+\[ p = [0.5506,\ 0.2025,\ 0.1358,\ 0.1112] \quad(\text{favours the best}) \]
+<div class="ans">Lower T → higher selection pressure</div>
+</div>
+
+<h3>5.7 Other selection schemes</h3>
+<ul>
+<li><b>Truncation selection:</b> only the top \(T\%\) (e.g. 50 %) are selected, each reproduced equally (used in breeding). With T = 50 % for A–D → A and B, each twice.</li>
+<li><b>Steady-state selection:</b> only a few individuals are replaced each generation.</li>
+<li><b>Elitism:</b> the best one or few individuals are copied unchanged to the next generation, so the best solution is never lost.</li>
+</ul>
+</section>
+
+<!-- ============ 6. CROSSOVER ============ -->
+<section class="topic" id="u5-cross">
+<h2>6. Types of Crossover <a class="back" href="#unit5-top">↑ Unit V topics</a></h2>
+<p><b>Crossover (recombination)</b> combines genetic material of two (or more) parents to create offspring. It is applied with <b>crossover probability</b> \(p_c\): for each pair, generate \(r\); if \(r \lt p_c\) perform crossover, otherwise copy the parents. Crossover <b>exploits</b> existing good material.</p>
+<p>For the binary examples: <span class="mono">P1 = 1 0 1 1 0 0 1 0</span>, <span class="mono">P2 = 0 1 0 1 1 1 0 1</span>.</p>
+
+<h3>6.1 Single-point crossover</h3>
+<p>Choose one random cut point; swap the tails.</p>
+<div class="numerical">
+<div class="qt">Cut after bit 4</div>
+<pre class="algo">P1 = 1 0 1 1 | 0 0 1 0        C1 = 1 0 1 1 | 1 1 0 1
+P2 = 0 1 0 1 | 1 1 0 1   →    C2 = 0 1 0 1 | 0 0 1 0</pre>
+</div>
+
+<h3>6.2 Two-point crossover</h3>
+<p>Choose two cut points; swap the middle segment. Less disruptive of schemata at string ends.</p>
+<div class="numerical">
+<div class="qt">Cuts after bits 2 and 5</div>
+<pre class="algo">P1 = 1 0 | 1 1 0 | 0 1 0      C1 = 1 0 | 0 1 1 | 0 1 0
+P2 = 0 1 | 0 1 1 | 1 0 1  →   C2 = 0 1 | 1 1 0 | 1 0 1</pre>
+</div>
+
+<h3>6.3 Multipoint (N-point) crossover</h3>
+<p>\(N\) cut points; alternate segments are exchanged. Even number of points → treated like a ring; odd number → one extra cut at the start.</p>
+
+<h3>6.4 Uniform crossover</h3>
+<p>Each gene is chosen independently from either parent according to a random <b>crossover mask</b> (1 → C1 takes gene from P1, 0 → from P2; C2 does the opposite).</p>
+<div class="numerical">
+<div class="qt">Mask = 1 1 0 1 0 0 1 0</div>
+<pre class="algo">Mask = 1 1 0 1 0 0 1 0
+P1   = 1 0 1 1 0 0 1 0
+P2   = 0 1 0 1 1 1 0 1
+C1   = 1 0 0 1 1 1 1 1     (P1 where mask=1, P2 where mask=0)
+C2   = 0 1 1 1 0 0 0 0     (P2 where mask=1, P1 where mask=0)</pre>
+</div>
+
+<h3>6.5 Three-parent crossover</h3>
+<p>Compare P1 and P2 bit by bit: if they agree, the child takes that bit; if they differ, the child takes the bit from P3.</p>
+<div class="numerical">
+<div class="qt">Example</div>
+<pre class="algo">P1    = 1 1 0 1 0 0 0 1
+P2    = 0 1 1 0 1 0 0 1
+P3    = 0 1 1 0 1 1 0 0
+Child = 0 1 1 0 1 0 0 1</pre>
+Positions 2, 6, 7, 8: P1 = P2 → copied (1, 0, 0, 1). Positions 1, 3, 4, 5 differ → from P3 (0, 1, 0, 1).
+</div>
+
+<h3>6.6 Crossover with reduced surrogate</h3>
+<p>Cut points are restricted to positions where the parents <i>differ</i>, so the offspring are guaranteed to be new whenever parents are not identical.</p>
+
+<h3>6.7 Shuffle crossover</h3>
+<p>Randomly shuffle gene positions in both parents (same shuffle), apply single-point crossover, then un-shuffle. Removes positional bias.</p>
+
+<h3>6.8 Precedence Preservative Crossover (PPX)</h3>
+<p>For permutation problems (scheduling). A random mask decides, for each child position, from which parent to take the <i>leftmost not-yet-used</i> gene; this preserves relative order (precedence) of operations from the parents.</p>
+
+<h3>6.9 Partially Matched Crossover (PMX) — permutation encoding</h3>
+<p>Two cut points define a <b>mapping section</b>; the sections are swapped, and conflicts outside the section are resolved using the mapping.</p>
+<div class="numerical">
+<div class="qt">Example</div>
+<pre class="algo">P1 = 1 2 3 | 4 5 6 7 | 8 9
+P2 = 4 5 2 | 1 8 7 6 | 9 3
+Mapping: 4↔1, 5↔8, 6↔7, 7↔6</pre>
+<b>C1:</b> middle from P2 → <span class="mono">_ _ _ | 1 8 7 6 | _ _</span>; fill the rest from P1 (1 2 3 … 8 9). Conflicts: 1 is already used → map 1→4; 8 used → map 8→5.
+<br><b>C2:</b> middle from P1 → <span class="mono">_ _ _ | 4 5 6 7 | _ _</span>; fill from P2 (4 5 2 … 9 3). Conflicts: 4→1, 5→8.
+<pre class="algo">C1 = 4 2 3 | 1 8 7 6 | 5 9
+C2 = 1 8 2 | 4 5 6 7 | 9 3</pre>
+Both are valid permutations (each city exactly once).
+</div>
+
+<h3>6.10 Order Crossover (OX)</h3>
+<p>Copy the middle section from one parent; fill the remaining positions, starting after the second cut, with genes from the other parent in their order (starting after the second cut), skipping genes already present.</p>
+<div class="numerical">
+<div class="qt">Example (same parents)</div>
+<b>C1</b> keeps P1's middle <span class="mono">4 5 6 7</span>. P2 read from after cut 2: <span class="mono">9 3 4 5 2 1 8 7 6</span> → remove 4, 5, 6, 7 → <span class="mono">9 3 2 1 8</span>. Place into positions 8, 9, 1, 2, 3.
+<br><b>C2</b> keeps P2's middle <span class="mono">1 8 7 6</span>. P1 read from after cut 2: <span class="mono">8 9 1 2 3 4 5 6 7</span> → remove 1, 8, 7, 6 → <span class="mono">9 2 3 4 5</span>. Place into positions 8, 9, 1, 2, 3.
+<pre class="algo">C1 = 2 1 8 | 4 5 6 7 | 9 3
+C2 = 3 4 5 | 1 8 7 6 | 9 2</pre>
+</div>
+
+<h3>6.11 Cycle Crossover (CX)</h3>
+<p>Each gene keeps the position it had in one of the parents. Find a <b>cycle</b> of positions; C1 takes these positions from P1 and the rest from P2.</p>
+<div class="numerical">
+<div class="qt">Example</div>
+<pre class="algo">P1 = 1 2 3 4 5 6 7 8
+P2 = 8 5 2 1 3 6 4 7</pre>
+Cycle: start at pos 1 (P1 = 1) → P2[1] = 8 → 8 is at pos 8 in P1 → P2[8] = 7 → pos 7 → P2[7] = 4 → pos 4 → P2[4] = 1 → back to start. Cycle positions = {1, 4, 7, 8}.
+<pre class="algo">C1 = 1 5 2 4 3 6 7 8     (P1 at 1,4,7,8; P2 elsewhere)
+C2 = 8 2 3 1 5 6 4 7     (P2 at 1,4,7,8; P1 elsewhere)</pre>
+</div>
+<p><b>Crossover probability:</b> with population \(N\) and \(p_c\), about \(p_c \cdot N/2\) pairs undergo crossover each generation.</p>
+</section>
+
+<!-- ============ 7. MUTATION ============ -->
+<section class="topic" id="u5-mut">
+<h2>7. Mutation <a class="back" href="#unit5-top">↑ Unit V topics</a></h2>
+<p><b>Mutation</b> randomly alters genes of an offspring with a small probability \(p_m\). It maintains <b>genetic diversity</b>, restores lost alleles, and prevents the population from getting stuck in local optima — it provides <b>exploration</b>. Expected number of mutated bits per generation \(= p_m \times N \times L\).</p>
+<table class="left">
+<tr><th>Type</th><th>Operation</th><th>Example</th></tr>
+<tr><td><b>Flipping (bit-flip)</b></td><td>Flip bits where the mutation chromosome has 1 (0 → 1, 1 → 0)</td><td><span class="mono">1011 0010</span> with mask <span class="mono">0010 0010</span> → <span class="mono">1001 0000</span></td></tr>
+<tr><td><b>Interchanging (swap)</b></td><td>Two random positions are exchanged</td><td>Swap positions 1 &amp; 6: <span class="mono">10110010</span> → <span class="mono">00110110</span>; permutation <span class="mono">1 2 3 4 5 6</span> → swap 2 &amp; 5 → <span class="mono">1 5 3 4 2 6</span></td></tr>
+<tr><td><b>Reversing</b></td><td>A random position is chosen and the bits next to it are reversed</td><td><span class="mono">1 0 1 1 0 1</span> → reverse bits after position 4 → <span class="mono">1 0 1 1 1 0</span></td></tr>
+<tr><td><b>Inversion</b></td><td>Reverse the substring between two positions</td><td>Invert positions 3–6 of <span class="mono">10 1100 10</span> → <span class="mono">10 0011 10</span></td></tr>
+<tr><td><b>Real-valued (creep/Gaussian)</b></td><td>Add small random value: \(x' = x + N(0, \sigma^2)\)</td><td>1.23 → 1.27</td></tr>
+</table>
+<div class="numerical">
+<div class="qt">Numerical 7.1 — Expected mutations</div>
+<div class="q">Population 20, string length 10, \(p_m = 0.01\). How many bits are expected to mutate per generation?</div>
+\[ p_m \times N \times L = 0.01 \times 20 \times 10 = 2 \text{ bits} \]
+<div class="ans">About 2 bits per generation</div>
+</div>
+<div class="note"><b class="h">Crossover vs mutation:</b> crossover exploits (combines good parts, large jumps within existing material); mutation explores (introduces new material). Too much mutation turns GA into random search; too little leads to premature convergence.</div>
+</section>
+
+<!-- ============ 8. REINSERTION ============ -->
+<section class="topic" id="u5-reins">
+<h2>8. Reinsertion (Replacement) <a class="back" href="#unit5-top">↑ Unit V topics</a></h2>
+<p>After offspring are produced, <b>reinsertion</b> decides which individuals form the next generation (population size is kept constant). The fraction of the population replaced per generation is the <b>generation gap</b> \(G\) (\(G = 1\): whole population replaced; small \(G\): steady-state GA).</p>
+<table class="left">
+<tr><th>Scheme</th><th>Description</th></tr>
+<tr><td><b>Pure (generational) reinsertion</b></td><td>Produce as many offspring as parents; offspring replace all parents. Every individual lives one generation.</td></tr>
+<tr><td><b>Uniform reinsertion</b></td><td>Produce fewer offspring than parents; they replace parents chosen <i>uniformly at random</i>.</td></tr>
+<tr><td><b>Elitist reinsertion</b></td><td>Produce fewer offspring; they replace the <i>worst</i> parents. The best parents survive (elitism).</td></tr>
+<tr><td><b>Fitness-based reinsertion</b></td><td>Produce <i>more</i> offspring than needed; only the best offspring (or best of parents + offspring) are inserted.</td></tr>
+<tr><td><b>Steady-state</b></td><td>Only one or two individuals replaced each iteration (e.g. replace worst).</td></tr>
+</table>
+<div class="numerical">
+<div class="qt">Numerical 8.1 — Comparing reinsertion schemes</div>
+<div class="q">Parents fitness {9, 7, 6, 4}; offspring fitness {8, 5, 3, 2}. Population size 4. Find the next generation under (a) pure (b) elitist with 1 elite (c) fitness-based (best 4 of all).</div>
+(a) Pure: {8, 5, 3, 2} — note the best (9) is lost!<br>
+(b) Elitist (keep best parent 9, fill with best 3 offspring): {9, 8, 5, 3}<br>
+(c) Fitness-based (best 4 of the 8): {9, 8, 7, 6}
+<div class="ans">Average fitness: (a) 4.5 (b) 6.25 (c) 7.5</div>
+</div>
+</section>
+
+<!-- ============ 9. SIMPLE GA ============ -->
+<section class="topic" id="u5-sga">
+<h2>9. A Simple Genetic Algorithm <a class="back" href="#unit5-top">↑ Unit V topics</a></h2>
+<div class="grid2">
+<div>
+<ol class="steps">
+  <li><b>Initialise:</b> generate a random population of \(N\) chromosomes (\(t = 0\)).</li>
+  <li><b>Evaluate:</b> decode each chromosome and compute its fitness \(f(x)\).</li>
+  <li><b>Test termination:</b> if satisfied, return the best chromosome; stop.</li>
+  <li><b>Selection:</b> form a mating pool using a selection method (e.g. roulette wheel).</li>
+  <li><b>Crossover:</b> pair the parents and, with probability \(p_c\), apply crossover.</li>
+  <li><b>Mutation:</b> mutate each gene with probability \(p_m\).</li>
+  <li><b>Reinsertion:</b> form the new population \(P(t+1)\); \(t \leftarrow t + 1\); go to Step 2.</li>
+</ol>
+<pre class="algo">begin
+  t ← 0
+  initialise P(t)
+  evaluate P(t)
+  while (not termination) do
+     P'(t)  ← select(P(t))
+     P''(t) ← crossover(P'(t))
+     P'''(t)← mutate(P''(t))
+     evaluate P'''(t)
+     P(t+1) ← reinsert(P'''(t), P(t))
+     t ← t + 1
+  end
+end</pre>
+</div>
+<figure>
+<svg viewBox="0 0 300 520" width="300" height="520">
+  <defs><marker id="gA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0L10,5L0,10z" fill="#334155"/></marker></defs>
+  <g font-size="13" font-weight="700" text-anchor="middle">
+    <rect x="95" y="10" width="110" height="34" rx="17" fill="#e2e8f0" stroke="#334155"/><text x="150" y="32">Start</text>
+    <rect x="60" y="66" width="180" height="36" rx="8" fill="#bfdbfe" stroke="#2563eb"/><text x="150" y="89">Initialise population</text>
+    <rect x="60" y="124" width="180" height="36" rx="8" fill="#bfdbfe" stroke="#2563eb"/><text x="150" y="147">Evaluate fitness</text>
+    <polygon points="150,182 230,217 150,252 70,217" fill="#fef3c7" stroke="#d97706"/><text x="150" y="214">Termination</text><text x="150" y="229">criteria met?</text>
+    <rect x="60" y="276" width="180" height="36" rx="8" fill="#ddd6fe" stroke="#7c3aed"/><text x="150" y="299">Selection</text>
+    <rect x="60" y="332" width="180" height="36" rx="8" fill="#ddd6fe" stroke="#7c3aed"/><text x="150" y="355">Crossover</text>
+    <rect x="60" y="388" width="180" height="36" rx="8" fill="#ddd6fe" stroke="#7c3aed"/><text x="150" y="411">Mutation</text>
+    <rect x="60" y="444" width="180" height="36" rx="8" fill="#ddd6fe" stroke="#7c3aed"/><text x="150" y="467">Reinsertion</text>
+    <rect x="236" y="200" width="60" height="34" rx="17" fill="#bbf7d0" stroke="#16a34a"/><text x="266" y="215" font-size="11">Best</text><text x="266" y="228" font-size="11">solution</text>
+  </g>
+  <g stroke="#334155" stroke-width="1.6" fill="none" marker-end="url(#gA)">
+    <line x1="150" y1="44" x2="150" y2="62"/><line x1="150" y1="102" x2="150" y2="120"/><line x1="150" y1="160" x2="150" y2="178"/>
+    <line x1="150" y1="252" x2="150" y2="272"/><line x1="150" y1="312" x2="150" y2="328"/><line x1="150" y1="368" x2="150" y2="384"/>
+    <line x1="150" y1="424" x2="150" y2="440"/>
+    <polyline points="60,462 20,462 20,142 56,142"/>
+  </g>
+  <line x1="230" y1="217" x2="236" y2="217" stroke="#334155" stroke-width="1.6"/>
+  <g font-size="12" fill="#475569" font-weight="700"><text x="232" y="210">Yes</text><text x="158" y="266">No</text><text x="24" y="300" transform="rotate(-90 24 300)">next generation</text></g>
+</svg>
+<figcaption>Flowchart of a simple GA</figcaption>
+</figure>
+</div>
+
+<div class="numerical">
+<div class="qt">Numerical 9.1 — One generation of a simple GA (Goldberg's example)</div>
+<div class="q">Maximise \(f(x) = x^2\), \(x \in \{0, 1, \dots, 31\}\), using 5-bit binary strings. Initial population: <span class="mono">01101, 11000, 01000, 10011</span>. Use roulette wheel selection, single-point crossover (\(p_c = 1\)), \(p_m = 0.001\).</div>
+<h4>Step 1 — Decode and evaluate</h4>
+<div class="tablewrap"><table>
+<tr><th>No.</th><th>String</th><th>x</th><th>\(f(x) = x^2\)</th><th>\(p_i = f_i/\sum f\)</th><th>Expected count \(f_i/\bar f\)</th><th>Actual count (roulette)</th></tr>
+<tr><td>1</td><td class="mono">01101</td><td>13</td><td>169</td><td>0.1444</td><td>0.58</td><td>1</td></tr>
+<tr><td>2</td><td class="mono">11000</td><td>24</td><td>576</td><td>0.4923</td><td>1.97</td><td>2</td></tr>
+<tr><td>3</td><td class="mono">01000</td><td>8</td><td>64</td><td>0.0547</td><td>0.22</td><td>0</td></tr>
+<tr><td>4</td><td class="mono">10011</td><td>19</td><td>361</td><td>0.3085</td><td>1.23</td><td>1</td></tr>
+<tr class="hl"><td colspan="3">Sum / Average / Max</td><td>1170 / 292.5 / 576</td><td>1.0</td><td>4.0</td><td>4</td></tr>
+</table></div>
+<h4>Step 2 — Selection (mating pool)</h4>
+String 1 once, string 2 twice, string 3 dies, string 4 once: <span class="mono">01101, 11000, 11000, 10011</span>.
+<h4>Step 3 — Crossover</h4>
+<div class="tablewrap"><table>
+<tr><th>Mating pool</th><th>Mate</th><th>Cut point</th><th>Offspring</th><th>x</th><th>\(f(x)\)</th></tr>
+<tr><td class="mono">0110|1</td><td>2</td><td>4</td><td class="mono">01100</td><td>12</td><td>144</td></tr>
+<tr><td class="mono">1100|0</td><td>1</td><td>4</td><td class="mono">11001</td><td>25</td><td>625</td></tr>
+<tr><td class="mono">11|000</td><td>4</td><td>2</td><td class="mono">11011</td><td>27</td><td>729</td></tr>
+<tr><td class="mono">10|011</td><td>3</td><td>2</td><td class="mono">10000</td><td>16</td><td>256</td></tr>
+<tr class="ok"><td colspan="5">Sum / Average / Max</td><td>1754 / 438.5 / 729</td></tr>
+</table></div>
+<h4>Step 4 — Mutation</h4>
+Expected mutated bits \(= p_m \times N \times L = 0.001 \times 4 \times 5 = 0.02\) → no bit is mutated in this generation.
+<div class="ans">After one generation: average fitness 292.5 → 438.5, maximum 576 → 729</div>
+</div>
+</section>
+
+<!-- ============ 10. SCHEMA ============ -->
+<section class="topic" id="u5-schema">
+<h2>10. Schema <a class="back" href="#unit5-top">↑ Unit V topics</a></h2>
+<p>A <b>schema</b> (plural <i>schemata</i>) is a <b>similarity template</b> describing a subset of strings that share values at certain positions. It is written over the alphabet \(\{0, 1, *\}\), where \(*\) is a "<b>don't care</b>" symbol (matches 0 or 1). E.g. \(H = 1{*}0{*}{*}\) matches all 5-bit strings with 1 at position 1 and 0 at position 3 (e.g. <span class="mono">11000</span>, <span class="mono">10011</span>). Schema theory (Holland) explains <i>why</i> GAs work.</p>
+<div class="formula">
+<b>Order</b> \(o(H)\) = number of fixed (non-\(*\)) positions.<br>
+<b>Defining length</b> \(\delta(H)\) = distance between the first and last fixed positions \(= (\text{last fixed position}) - (\text{first fixed position})\).<br>
+<b>Schema fitness</b> \(f(H)\) = average fitness of all strings in the population that match \(H\).
+</div>
+<div class="formula">\[ \text{Number of schemata of length } L: (k+1)^{L} = 3^{L}\ (\text{binary}); \qquad \text{each string belongs to } 2^{L} \text{ schemata} \]
+A population of \(N\) strings contains between \(2^{L}\) and \(N\cdot 2^{L}\) schemata.</div>
+<div class="numerical">
+<div class="qt">Numerical 10.1 — Order and defining length</div>
+<div class="q">Find \(o(H)\) and \(\delta(H)\) for (a) \(H_1 = 1{*}0{*}{*}1{*}\) (b) \(H_2 = {*}{*}10{*}{*}{*}\) (c) \(H_3 = {*}{*}{*}{*}1{*}{*}\). Does <span class="mono">1101010</span> match \(H_1\)?</div>
+(a) Fixed positions 1, 3, 6 → \(o = 3\), \(\delta = 6 - 1 = 5\)<br>
+(b) Fixed positions 3, 4 → \(o = 2\), \(\delta = 4 - 3 = 1\)<br>
+(c) Fixed position 5 → \(o = 1\), \(\delta = 0\)<br>
+<span class="mono">1101010</span>: pos 1 = 1 ✓, pos 3 = 0 ✓, pos 6 = 1 ✓ → matches \(H_1\).
+<div class="ans">H₁: o=3, δ=5 | H₂: o=2, δ=1 | H₃: o=1, δ=0</div>
+</div>
+<div class="numerical">
+<div class="qt">Numerical 10.2 — Counting schemata</div>
+<div class="q">For \(L = 5\) and a population of 4 strings, how many schemata exist, how many does each string represent, and how many are present in the population?</div>
+\[ 3^5 = 243 \text{ schemata},\quad 2^5 = 32 \text{ per string},\quad 32 \le \text{number in population} \le 4 \times 32 = 128 \]
+</div>
+</section>
+
+<!-- ============ 11. THEOREM ============ -->
+<section class="topic" id="u5-theorem">
+<h2>11. Fundamental Theorem of GA (Schema Theorem) <a class="back" href="#unit5-top">↑ Unit V topics</a></h2>
+<p>Let \(m(H, t)\) be the number of strings matching schema \(H\) at generation \(t\). Holland's schema theorem gives the expected number in the next generation under proportional selection, single-point crossover and bit mutation.</p>
+
+<h3>11.1 Derivation</h3>
+<p><b>(i) Effect of selection.</b> A string \(i\) is selected with probability \(f_i / \sum f_j\). With \(N\) selections, the expected number of copies of schema \(H\) is:</p>
+<div class="formula">\[ m(H, t+1) = m(H, t)\cdot N\cdot\frac{f(H)}{\sum_j f_j} = m(H, t)\,\frac{f(H)}{\bar f} \]</div>
+<p>So above-average schemata (\(f(H) \gt \bar f\)) grow and below-average ones decline. If \(f(H) = (1 + c)\bar f\) stays constant, \(m(H, t) = m(H, 0)(1 + c)^{t}\) — <b>exponential growth</b>.</p>
+<p><b>(ii) Effect of crossover.</b> A schema is destroyed if the cut point falls within its defining length. With \(L - 1\) possible cut points:</p>
+<div class="formula">\[ p_d = \frac{\delta(H)}{L - 1}, \qquad p_{survival} \ge 1 - p_c\,\frac{\delta(H)}{L - 1} \]</div>
+<p><b>(iii) Effect of mutation.</b> Each of the \(o(H)\) fixed bits must survive (probability \(1 - p_m\) each):</p>
+<div class="formula">\[ p_{survival} = (1 - p_m)^{o(H)} \approx 1 - o(H)\,p_m \quad (p_m \ll 1) \]</div>
+
+<h3>11.2 The Schema Theorem</h3>
+<div class="formula">\[ \boxed{\; m(H, t+1) \;\ge\; m(H, t)\cdot\frac{f(H)}{\bar f}\cdot\left[1 - p_c\,\frac{\delta(H)}{L - 1} - o(H)\,p_m\right] \;} \]</div>
+<div class="terms"><b class="h">Terms</b><ul>
+<li>\(m(H, t)\) — number of instances of schema \(H\) at generation \(t\).</li>
+<li>\(f(H)\) — average fitness of strings containing \(H\); \(\bar f\) — average population fitness.</li>
+<li>\(p_c, p_m\) — crossover and mutation probabilities; \(L\) — string length.</li>
+<li>\(\delta(H)\) — defining length; \(o(H)\) — order.</li>
+</ul></div>
+<p><b>Statement:</b> <i>Short, low-order, above-average schemata receive exponentially increasing trials in subsequent generations.</i> (The "≥" is because crossover can also create new instances of \(H\), which is ignored.)</p>
+
+<div class="numerical">
+<div class="qt">Numerical 11.1 — Schema theorem on the x² example</div>
+<div class="q">Using the initial population of Numerical 9.1 (\(\bar f = 292.5\), \(L = 5\), \(p_c = 1\), \(p_m = 0.001\)), predict the number of copies of \(H_1 = 1{*}{*}{*}{*}\), \(H_2 = {*}10{*}{*}\) and \(H_3 = 1{*}{*}{*}0\) in the next generation, and compare with the actual result.</div>
+<b>H₁ = 1****</b>: matching strings 11000 (576), 10011 (361) → \(m = 2\), \(f(H_1) = (576 + 361)/2 = 468.5\), \(o = 1\), \(\delta = 0\).
+\[ m(H_1, t+1) \ge 2 \times \frac{468.5}{292.5} \times [1 - 0 - 1(0.001)] = 3.20 \times 0.999 = 3.20 \]
+Actual in new population (<span class="mono">11001, 11011, 10000</span>): <b>3</b> ✓<br><br>
+<b>H₂ = *10**</b>: matching 11000 (576), 01000 (64) → \(m = 2\), \(f(H_2) = 320\), \(o = 2\), \(\delta = 1\).
+\[ m(H_2, t+1) \ge 2 \times \frac{320}{292.5} \times \left[1 - 1\cdot\frac{1}{4} - 2(0.001)\right] = 2.188 \times 0.748 = 1.64 \]
+Actual (<span class="mono">11001, 11011</span>): <b>2</b> ✓ (≥ 1.64)<br><br>
+<b>H₃ = 1***0</b>: matching 11000 → \(m = 1\), \(f(H_3) = 576\), \(o = 2\), \(\delta = 4\).
+\[ m(H_3, t+1) \ge 1 \times \frac{576}{292.5} \times \left[1 - \frac{4}{4} - 0.002\right] = 1.97 \times (-0.002) \approx 0 \]
+Actual (<span class="mono">10000</span>): 1 — long schemata are easily disrupted, so the bound gives no guarantee.
+<div class="ans">Short, low-order, fit schemata (H₁, H₂) grow; long schema H₃ has no guaranteed survival</div>
+</div>
+</section>
+
+<!-- ============ 12. BBH ============ -->
+<section class="topic" id="u5-bbh">
+<h2>12. Building Block Hypothesis <a class="back" href="#unit5-top">↑ Unit V topics</a></h2>
+<p><b>Building blocks</b> are <b>short (small δ), low-order (small o), highly fit schemata</b>. The schema theorem shows that such schemata survive and multiply.</p>
+<div class="note"><b class="h">Building Block Hypothesis (Goldberg, 1989):</b> <i>"A genetic algorithm seeks near-optimal performance through the juxtaposition of short, low-order, high-performance schemata, called the building blocks."</i></div>
+<p>In other words, just as a child builds a big structure from small bricks, a GA builds good complete solutions by combining (through crossover) good partial solutions (building blocks) found in different individuals. In the x² example, the building blocks <span class="mono">1****</span> and <span class="mono">*1***</span> (high bits set) combine to give <span class="mono">11***</span>, leading towards the optimum <span class="mono">11111</span> (x = 31).</p>
+<h3>12.1 Implicit parallelism</h3>
+<p>Although a GA processes only \(N\) strings per generation, it implicitly evaluates and processes about \(O(N^{3})\) schemata simultaneously (Holland). This "implicit parallelism" explains the efficiency of GAs.</p>
+<h3>12.2 Limitations</h3>
+<ul>
+<li><b>Deception:</b> if low-order building blocks mislead the search away from the global optimum (deceptive problems), the hypothesis fails.</li>
+<li><b>Linkage problem:</b> if related genes are far apart on the chromosome (long δ), crossover disrupts them — addressed by inversion operators, linkage learning, and messy GAs.</li>
+<li>Schema theorem considers only destruction, not creation, and only one generation ahead.</li>
+</ul>
+</section>
+
+<!-- ============ 13. REVISION ============ -->
+<section class="topic" id="u5-compare">
+<h2>13. Quick Revision — Unit V <a class="back" href="#unit5-top">↑ Unit V topics</a></h2>
+<div class="grid2">
+  <div class="terms"><b class="h">Advantages of GA</b><ul><li>No derivatives or continuity needed</li><li>Parallel, population-based global search</li><li>Handles discrete, continuous and mixed variables</li><li>Robust to noise; multiple good solutions</li><li>Easily combined with other methods (neuro-GA, fuzzy-GA)</li></ul></div>
+  <div class="note"><b class="h">Limitations</b><ul><li>No guarantee of global optimum</li><li>Computationally expensive (many fitness evaluations)</li><li>Parameter tuning (\(N, p_c, p_m\)) needed</li><li>Premature convergence possible</li></ul></div>
+</div>
+<p><b>Applications:</b> function optimisation, travelling salesman, scheduling/timetabling, VLSI layout, neural network weight/architecture optimisation, tuning fuzzy MFs and rules, machine learning, robotics path planning, image processing.</p>
+<div class="note"><b class="h">Formula sheet</b>
+\[ x = x_{min} + \frac{x_{max} - x_{min}}{2^L - 1}\,\text{DV}(s);\qquad p_i = \frac{f_i}{\sum f_j};\qquad \text{expected count} = \frac{f_i}{\bar f};\qquad p_i^{Boltz} = \frac{e^{f_i/T}}{\sum e^{f_j/T}} \]
+\[ \text{Mutations/generation} = p_m N L;\qquad o(H),\ \delta(H);\qquad 3^L \text{ schemata} \]
+\[ m(H, t+1) \ge m(H, t)\,\frac{f(H)}{\bar f}\left[1 - p_c\frac{\delta(H)}{L-1} - o(H)\,p_m\right] \]
+</div>
+</section>
+</div><!-- /unit5 -->
+
+
 </main>
 
-<a id="toTop" href="#home" title="Back to top">↑</a>
-<footer>ANN study notes — Unit I &amp; Unit II. Mathematical formulas are rendered with MathJax (internet connection required for first load).</footer>
+<a id="toTop" href="#" title="Back to top">↑</a>
+<footer>Soft Computing study notes — Units I to V. Mathematical formulas are rendered with MathJax (internet connection required for first load).</footer>
 
 <script>
 /* ---------- Layered network drawing helper ---------- */
@@ -1808,28 +3164,43 @@ function setupCanvas(id) {
   const ctx = c.getContext('2d'); ctx.scale(dpr, dpr);
   return { ctx, w, h };
 }
-function plotFns(id, fns, xr, yr) {
+function plotFns(id, fns, xr, yr, opt = {}) {
   const cv = setupCanvas(id); if (!cv) return;
-  const { ctx, w, h } = cv, pad = 22;
+  const { ctx, w, h } = cv, pad = 22, padB = opt.step ? 30 : 22, step = opt.step || 1;
   const X = x => pad + (x - xr[0]) / (xr[1] - xr[0]) * (w - 2 * pad);
-  const Y = y => h - pad - (y - yr[0]) / (yr[1] - yr[0]) * (h - 2 * pad);
-  ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1;
-  for (let gx = Math.ceil(xr[0]); gx <= xr[1]; gx++) { ctx.beginPath(); ctx.moveTo(X(gx), Y(yr[0])); ctx.lineTo(X(gx), Y(yr[1])); ctx.stroke(); }
+  const Y = y => h - padB - (y - yr[0]) / (yr[1] - yr[0]) * (h - pad - padB);
+  const x0 = (xr[0] <= 0 && xr[1] >= 0) ? 0 : xr[0], y0 = (yr[0] <= 0 && yr[1] >= 0) ? 0 : yr[0];
+  ctx.strokeStyle = '#e2e8f0'; ctx.lineWidth = 1; ctx.fillStyle = '#475569'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+  for (let gx = Math.ceil(xr[0] / step - 1e-9) * step; gx <= xr[1] + 1e-9; gx += step) {
+    ctx.beginPath(); ctx.moveTo(X(gx), Y(yr[0])); ctx.lineTo(X(gx), Y(yr[1])); ctx.stroke();
+    if (opt.step) ctx.fillText(+gx.toFixed(2), X(gx), h - padB + 13);
+  }
+  ctx.textAlign = 'left';
   [-1, 1].forEach(gy => { if (gy >= yr[0] && gy <= yr[1]) { ctx.setLineDash([4, 3]); ctx.beginPath(); ctx.moveTo(X(xr[0]), Y(gy)); ctx.lineTo(X(xr[1]), Y(gy)); ctx.stroke(); ctx.setLineDash([]); } });
   ctx.strokeStyle = '#334155'; ctx.lineWidth = 1.3;
-  ctx.beginPath(); ctx.moveTo(X(xr[0]), Y(0)); ctx.lineTo(X(xr[1]), Y(0)); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(X(0), Y(yr[0])); ctx.lineTo(X(0), Y(yr[1])); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(X(xr[0]), Y(y0)); ctx.lineTo(X(xr[1]), Y(y0)); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(X(x0), Y(yr[0])); ctx.lineTo(X(x0), Y(yr[1])); ctx.stroke();
   ctx.fillStyle = '#475569'; ctx.font = '11px sans-serif';
-  ctx.fillText('x', X(xr[1]) - 8, Y(0) - 5); ctx.fillText('f(x)', X(0) + 4, Y(yr[1]) + 10);
-  [-1, 1].forEach(gy => { if (gy >= yr[0] && gy <= yr[1]) ctx.fillText(gy, X(0) - 16, Y(gy) + 4); });
-  fns.forEach(([f, color, dash]) => {
-    ctx.strokeStyle = color; ctx.lineWidth = 2.4; ctx.setLineDash(dash || []);
-    ctx.beginPath(); let first = true;
-    for (let k = 0; k <= 500; k++) {
-      const x = xr[0] + k * (xr[1] - xr[0]) / 500, y = f(x);
-      if (first) { ctx.moveTo(X(x), Y(y)); first = false; } else ctx.lineTo(X(x), Y(y));
+  ctx.fillText(opt.xl || 'x', X(xr[1]) - 10, Y(y0) - 5); ctx.fillText(opt.yl || 'f(x)', X(x0) + 4, Y(yr[1]) + 10);
+  [-1, 1].forEach(gy => { if (gy >= yr[0] && gy <= yr[1]) ctx.fillText(gy, X(x0) - 16, Y(gy) + 4); });
+  fns.forEach(([f, color, dash, fill]) => {
+    const pts = [];
+    for (let k = 0; k <= 600; k++) { const x = xr[0] + k * (xr[1] - xr[0]) / 600; pts.push([X(x), Y(f(x))]); }
+    if (fill) {
+      ctx.fillStyle = color + '40'; ctx.beginPath(); ctx.moveTo(X(xr[0]), Y(y0));
+      pts.forEach(p => ctx.lineTo(p[0], p[1])); ctx.lineTo(X(xr[1]), Y(y0)); ctx.closePath(); ctx.fill();
     }
+    ctx.strokeStyle = color; ctx.lineWidth = 2.4; ctx.setLineDash(dash || []);
+    ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1])));
     ctx.stroke(); ctx.setLineDash([]);
+  });
+  (opt.marks || []).forEach(m => {
+    ctx.strokeStyle = m.color || '#dc2626'; ctx.lineWidth = 1.8; ctx.setLineDash([5, 3]);
+    ctx.beginPath(); ctx.moveTo(X(m.x), Y(yr[0])); ctx.lineTo(X(m.x), Y(yr[1])); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = m.color || '#dc2626'; ctx.font = 'bold 11px sans-serif'; ctx.fillText(m.label, X(m.x) + 4, Y(yr[1]) + 22 + (m.dy || 0));
+  });
+  (opt.legend || []).forEach((l, i) => {
+    ctx.fillStyle = l[1]; ctx.fillRect(w - pad - 92, pad + i * 15, 12, 4); ctx.fillStyle = '#334155'; ctx.font = '11px sans-serif'; ctx.fillText(l[0], w - pad - 76, pad + i * 15 + 6);
   });
 }
 
@@ -1891,6 +3262,49 @@ plotFns('act-ramp', [[x => (x > 1 ? 1 : x < 0 ? 0 : x), '#2563eb'], [x => Math.m
 const bip = [{ x: 1, y: 1 }, { x: 1, y: -1 }, { x: -1, y: 1 }, { x: -1, y: -1 }];
 plotPoints('plot-hebb-and', { pts: bip.map(p => ({ ...p, c: p.x === 1 && p.y === 1 })), line: [2, 2, -2] });
 
+/* ---------- Draw Unit III-V figures ---------- */
+const tri = (a, b, c) => x => Math.max(0, Math.min((x - a) / (b - a), (c - x) / (c - b)));
+const trap = (a, b, c, d) => x => Math.max(0, Math.min((x - a) / (b - a), 1, (d - x) / (d - c)));
+const lerp = pts => x => { if (x <= pts[0][0]) return pts[0][1]; for (let i = 1; i < pts.length; i++) if (x <= pts[i][0]) { const [x0, y0] = pts[i - 1], [x1, y1] = pts[i]; return y0 + (y1 - y0) * (x - x0) / (x1 - x0); } return pts[pts.length - 1][1]; };
+const Sf = (a, b) => x => x <= a ? 0 : x >= b ? 1 : x <= (a + b) / 2 ? 2 * ((x - a) / (b - a)) ** 2 : 1 - 2 * ((x - b) / (b - a)) ** 2;
+const MU = [0, 1.15];
+plotFns('fz-tall', [[x => (x >= 180 ? 1 : 0), '#2563eb'], [lerp([[150, 0], [160, 0.2], [170, 0.5], [180, 0.8], [190, 1], [200, 1]]), '#dc2626']], [150, 200], MU,
+  { step: 10, xl: 'cm', yl: 'μ', legend: [['crisp', '#2563eb'], ['fuzzy', '#dc2626']] });
+plotFns('mf-feat', [[trap(2, 4, 6, 8), '#7c3aed', null, true]], [0, 10], MU,
+  { step: 1, yl: 'μ(x)', marks: [{ x: 2, label: 'support →', color: '#2563eb' }, { x: 4, label: 'core', color: '#16a34a', dy: 14 }, { x: 6, label: '', color: '#16a34a' }, { x: 8, label: '', color: '#2563eb' }] });
+plotFns('mf-tri', [[tri(2, 5, 8), '#2563eb']], [0, 10], MU, { step: 2, yl: 'μ' });
+plotFns('mf-trap', [[trap(1, 3, 6, 9), '#2563eb']], [0, 10], MU, { step: 2, yl: 'μ' });
+plotFns('mf-gauss', [[x => Math.exp(-((x - 5) ** 2) / 8), '#2563eb']], [0, 10], MU, { step: 2, yl: 'μ' });
+plotFns('mf-bell', [[x => 1 / (1 + Math.abs((x - 5) / 2) ** 4), '#2563eb']], [0, 10], MU, { step: 2, yl: 'μ' });
+plotFns('mf-sig', [[x => 1 / (1 + Math.exp(-(x - 5))), '#2563eb'], [x => 1 / (1 + Math.exp(x - 5)), '#dc2626', [5, 4]]], [0, 10], MU, { step: 2, yl: 'μ' });
+plotFns('mf-szp', [[Sf(1, 5), '#2563eb'], [x => 1 - Sf(5, 9)(x), '#dc2626'], [x => (x <= 4 ? Sf(1, 4)(x) : x <= 6 ? 1 : 1 - Sf(6, 9)(x)), '#16a34a', [5, 4]]], [0, 10], MU,
+  { step: 2, yl: 'μ', legend: [['S', '#2563eb'], ['Z', '#dc2626'], ['π', '#16a34a']] });
+plotFns('fis-temp', [[tri(5, 15, 25), '#2563eb'], [tri(15, 25, 35), '#16a34a'], [tri(25, 35, 45), '#dc2626']], [0, 50], MU,
+  { step: 10, xl: '°C', yl: 'μ', marks: [{ x: 28, label: 'T = 28', color: '#0f172a' }], legend: [['Cold', '#2563eb'], ['Warm', '#16a34a'], ['Hot', '#dc2626']] });
+plotFns('fis-hum', [[tri(10, 30, 50), '#2563eb'], [tri(30, 50, 70), '#16a34a'], [tri(50, 70, 90), '#dc2626']], [0, 100], MU,
+  { step: 20, xl: '%', yl: 'μ', marks: [{ x: 65, label: 'H = 65', color: '#0f172a' }], legend: [['Low', '#2563eb'], ['Medium', '#16a34a'], ['High', '#dc2626']] });
+const mMed = tri(25, 50, 75), mFast = tri(50, 75, 100);
+plotFns('fis-out', [[mMed, '#94a3b8', [3, 3]], [mFast, '#94a3b8', [3, 3]],
+  [z => Math.max(Math.min(0.25, mMed(z)), Math.min(0.75, mFast(z))), '#7c3aed', null, true]], [0, 100], MU,
+  { step: 10, xl: 'speed', yl: 'μ', marks: [{ x: 67.8, label: 'centroid 67.8' }, { x: 75, label: 'MOM 75', color: '#16a34a', dy: 14 }] });
+plotFns('defz-shape', [[lerp([[0, 0], [1, 0.5], [3, 0.5], [4, 1], [5, 1], [6, 0], [7, 0]]), '#7c3aed', null, true]], [0, 7], MU,
+  { step: 1, xl: 'z', yl: 'μ', marks: [{ x: 3.4286, label: 'z* = 3.43' }, { x: 4.5, label: 'MOM 4.5', color: '#16a34a', dy: 14 }] });
+(function () {
+  const cv = setupCanvas('ga-wheel'); if (!cv) return;
+  const { ctx, w, h } = cv, cx = w / 2, cy = h / 2, r = Math.min(w, h) / 2 - 12;
+  const data = [['A', 50, '#2563eb'], ['B', 25, '#16a34a'], ['C', 15, '#f59e0b'], ['D', 10, '#dc2626']];
+  let a0 = -Math.PI / 2;
+  data.forEach(([n, v, c]) => {
+    const a1 = a0 + 2 * Math.PI * v / 100;
+    ctx.beginPath(); ctx.moveTo(cx, cy); ctx.arc(cx, cy, r, a0, a1); ctx.closePath(); ctx.fillStyle = c; ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2; ctx.stroke();
+    const am = (a0 + a1) / 2; ctx.fillStyle = '#fff'; ctx.font = 'bold 13px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(`${n} ${v}%`, cx + Math.cos(am) * r * 0.62, cy + Math.sin(am) * r * 0.62 + 4);
+    a0 = a1;
+  });
+  ctx.fillStyle = '#0f172a'; ctx.beginPath(); ctx.moveTo(cx + r + 10, cy); ctx.lineTo(cx + r - 8, cy - 7); ctx.lineTo(cx + r - 8, cy + 7); ctx.fill();
+})();
+
 /* ---------- Draw Unit II figures ---------- */
 drawNet('net-slp', {
   layers: [{ nodes: ['1', 'X₁', 'X₂', 'Xₙ'], title: 'Input units' }, { nodes: ['Y'], title: 'Output unit', color: 2 }],
@@ -1939,17 +3353,38 @@ drawNet('net-lvq', { layers: [{ nodes: ['X₁', 'X₂', 'X₃', 'X₄'], title: 
 </script>
 
 <script>
-/* ---------- Active nav highlight ---------- */
+/* ---------- Single-unit view: show only the unit being visited ---------- */
 (function () {
   const links = document.querySelectorAll('nav.top a.navlink');
   const blocks = document.querySelectorAll('[data-unit-block]');
-  function update() {
-    let current = null;
-    blocks.forEach(b => { if (b.getBoundingClientRect().top <= 120) current = b.id; });
-    links.forEach(l => l.classList.toggle('active', l.dataset.unit === current));
+  const hero = document.getElementById('home');
+  const pending = [];
+  function typeset(block) {
+    if (block.dataset.typeset) return Promise.resolve();
+    block.dataset.typeset = '1';
+    if (window.MathJax && MathJax.typesetPromise) return MathJax.typesetPromise([block]).catch(() => {});
+    return new Promise(res => pending.push([block, res]));
   }
-  window.addEventListener('scroll', update, { passive: true });
-  update();
+  window.__typesetPending = function () {
+    pending.splice(0).forEach(([b, res]) => MathJax.typesetPromise([b]).catch(() => {}).then(res));
+  };
+  function show() {
+    const id = decodeURIComponent(location.hash.slice(1)) || 'home';
+    const target = document.getElementById(id);
+    const block = target ? target.closest('[data-unit-block]') : null;
+    blocks.forEach(b => b.classList.toggle('shown', b === block));
+    hero.style.display = block ? 'none' : '';
+    links.forEach(l => l.classList.toggle('active', !!block && l.dataset.unit === block.id));
+    const go = () => {
+      if (!block || target === block || target.classList.contains('unit-head')) window.scrollTo({ top: 0 });
+      else target.scrollIntoView();
+    };
+    go();
+    if (block) typeset(block).then(go);   // re-scroll after math changes the layout
+  }
+  window.addEventListener('hashchange', show);
+  show();
+  document.getElementById('toTop').addEventListener('click', e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
 })();
 </script>
 </body>
